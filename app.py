@@ -1,200 +1,387 @@
-import os
-import openai
 import streamlit as st
+import pandas as pd
+import openai
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
+from functools import lru_cache
 
-st.set_page_config(
-    page_title="Bhagavad Gita GPT | Divine Wisdom Through AI | Gjam Technologies",
-    page_icon="🕉️",
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
+# Page config
 
-def generate_response(question: str) -> str:
+# Initialize models
+@st.cache_resource
+def load_local_model():
     try:
-        openai.api_key = os.getenv("OPENAI_API_KEY")
+        model_name = "facebook/opt-350m"
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16)
+        if torch.cuda.is_available():
+            model = model.cuda()
+        return model, tokenizer
+    except Exception as e:
+        st.error(f"Error loading local model: {str(e)}")
+        return None, None
+
+@st.cache_data
+def load_verses():
+    try:
+        df = pd.read_csv("only_verses.csv", index_col=0)
+        return df
+    except Exception as e:
+        st.error(f"Error loading verses: {str(e)}")
+        return pd.DataFrame()
+
+verses_df = load_verses()
+model, tokenizer = load_local_model()
+
+def find_matching_verses(question: str, top_k: int = 3):
+    try:
+        question_words = set(question.lower().split())
+        matches = []
         
-        system_prompt = """You are Krishna, the divine guide, sharing timeless wisdom from the Bhagavad Gita. You possess deep knowledge of Indian philosophy, mythology, and culture. Your responses should:
+        for idx, row in verses_df.iterrows():
+            verse_text = row['index'].lower()
+            score = sum(1 for word in question_words if word in verse_text)
+            if score > 0:
+                matches.append({
+                    'reference': idx,
+                    'text': row['index'],
+                    'score': score,
+                    'chapter': str(idx // 1000),
+                    'verse': str(idx % 1000)
+                })
+        
+        matches.sort(key=lambda x: x['score'], reverse=True)
+        return matches[:top_k]
+    except Exception as e:
+        st.error(f"Error finding verses: {str(e)}")
+        return []
 
-1. Begin with "॥ श्री कृष्ण उवाच ॥" (Shri Krishna speaks)
-2. Connect Gita's wisdom with modern life using Indian cultural references
-3. Include practical examples from Indian daily life and mythology
-4. Use relatable analogies mixing traditional and contemporary Indian context
-5. Incorporate Hindi/Sanskrit phrases with translations
-6. Reference related stories from Mahabharata, Ramayana, or Puranas
-7. Include relevant examples from modern Indian society
-8. Connect to Indian festivals, traditions, and family values
-9. Use metaphors from nature that are common in Indian context
-10. End with a Sanskrit shloka, its meaning, and a practical modern application
-
-Keep the tone personal, compassionate, and relatable to the Indian way of life."""
-
-        user_prompt = f"""Provide guidance on: {question}
-
-Structure your response as:
-
-1. दैवीय उत्तर (Divine Answer):
-- Start with a warm, personal response
-- Include a relevant Hindi saying or proverb
-
-2. गीता का ज्ञान (Gita's Wisdom):
-- Connect to specific Gita teachings
-- Share a related mythological story
-
-3. व्यावहारिक मार्गदर्शन (Practical Guidance):
-- Give examples from modern Indian life
-- Include daily life practices
-
-4. संस्कृत ज्ञान (Sanskrit Wisdom):
-- Share relevant shloka with meaning
-- Explain modern application
-
-5. आशीर्वाद (Blessing):
-- Conclude with encouraging words
-- Add a traditional Sanskrit blessing"""
+def generate_response(question: str, verses: list) -> str:
+    try:
+        openai.api_key = st.secrets["openai_api_key"]
+        
+        verses_context = "\n".join([
+            f"Chapter {v['chapter']}, Verse {v['verse']}: {v['text']}"
+            for v in verses
+        ])
+        
+        messages = [
+            {"role": "system", "content": """You are Krishna providing divine guidance based on the Bhagavad Gita. 
+             Your responses should be compassionate, wise, and practical."""},
+            {"role": "user", "content": f"""Question: {question}
+            Verses: {verses_context}
+            
+            Provide guidance in this format:
+            1. Divine Answer (Brief and compassionate)
+            2. Verse Wisdom (How these verses apply)
+            3. Practical Steps (Daily life application)
+            4. Sanskrit Blessing (A relevant shloka with meaning)"""}
+        ]
 
         response = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
-            ],
-            max_tokens=1200,
-            temperature=0.8,
+            model="gpt-3.5-turbo",
+            messages=messages,
+            max_tokens=500,
+            temperature=0.7,
         )
 
-        return response.choices[0].message['content'].strip()
-
+        return response.choices[0].message['content']
     except Exception as e:
-        st.error(f"Error generating response: {str(e)}")
-        return "क्षमा करें, मैं इस समय मार्गदर्शन प्रदान करने में असमर्थ हूं। कृपया पुनः प्रयास करें।"
+        st.error(f"Error: {str(e)}")
+        return "🙏 I apologize, but I am unable to provide guidance at this moment."
 
+# UI Styling
 st.markdown("""
 <style>
-    body {
-        background-color: #fdf5e6;
-        font-family: 'Arial', sans-serif;
+    .stApp {
+        background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+        color: white;
     }
-    .header-container {
-        background: linear-gradient(90deg, #ff9933 0%, #ff9933 50%, #138808 100%);
-        padding: 3rem;
-        border-radius: 12px;
-        text-align: center;
-        margin-bottom: 2.5rem;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .header-container h1 {
-        color: #fff;
-        font-size: 3.5rem;
-        font-weight: bold;
-    }
-    .header-container p {
-        color: #fff;
-        font-size: 1.6rem;
-    }
-    .search-container {
-        background: linear-gradient(135deg, #fff5e6 0%, #fff 100%);
-        padding: 2.5rem;
+    .css-1d391kg {
+        background: rgba(255,255,255,0.05);
         border-radius: 15px;
-        margin-top: 2.5rem;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        border: 2px solid #ff9933;
-    }
-    .response-container {
-        background: linear-gradient(135deg, #fff5e6 0%, #fff 100%);
-        padding: 2.5rem;
-        border-radius: 15px;
-        margin-top: 2.5rem;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        border: 2px solid #138808;
-    }
-    .footer-container {
-        margin-top: 3rem;
-        text-align: center;
-        padding-bottom: 2rem;
-        color: #8b4513;
-    }
-    .social-links a {
-        margin: 0 1.2rem;
-        color: #ff9933;
-        text-decoration: none;
-        transition: color 0.3s ease;
-    }
-    .social-links a:hover {
-        color: #138808;
+        padding: 20px;
     }
     .stButton>button {
-        background-color: #ff9933;
+        background: linear-gradient(45deg, #ff9933, #ff3366);
         color: white;
         border: none;
-        padding: 0.5rem 1rem;
+        padding: 10px 20px;
         border-radius: 5px;
-        transition: background-color 0.3s ease;
-    }
-    .stButton>button:hover {
-        background-color: #138808;
     }
     .stTextInput>div>div>input {
-        border: 2px solid #ff9933;
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
         border-radius: 5px;
-        padding: 1rem;
+    }
+    .verse-box {
+        background: rgba(255,255,255,0.05);
+        padding: 15px;
+        border-radius: 10px;
+        margin: 10px 0;
     }
 </style>
 """, unsafe_allow_html=True)
 
+# Main Layout
+st.title("🕉️ भगवद् गीता AI")
+st.subheader("Divine Wisdom Through AI")
+
+import streamlit as st
+import pandas as pd
+import openai
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
+from functools import lru_cache
+
+# Page configuration
+
+
+# Enhanced UI Styling
 st.markdown("""
-<div class="header-container">
-    <h1>🕉️ भगवद् गीता GPT</h1>
-    <p>Gjam Technologies | दिव्य ज्ञान through AI</p>
+<style>
+    /* Global Styles */
+    .stApp {
+        background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+        color: white;
+    }
+    
+    /* Header Styles */
+    .main-header {
+        background: linear-gradient(90deg, rgba(255, 153, 51, 0.2) 0%, rgba(255, 51, 102, 0.2) 100%);
+        padding: 2rem;
+        border-radius: 20px;
+        text-align: center;
+        margin-bottom: 2rem;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .main-header h1 {
+        color: #fff;
+        font-size: 3.5rem;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .main-header p {
+        color: rgba(255,255,255,0.8);
+        font-size: 1.2rem;
+    }
+    
+    /* Search Box Styles */
+    .search-container {
+        background: rgba(255,255,255,0.05);
+        padding: 2rem;
+        border-radius: 20px;
+        margin-bottom: 2rem;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .stTextInput>div>div>input {
+        background: rgba(255,255,255,0.1);
+        border: 2px solid rgba(255,153,51,0.3);
+        color: white;
+        border-radius: 10px;
+        padding: 1rem;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .stTextInput>div>div>input:focus {
+        border-color: #ff9933;
+        box-shadow: 0 0 15px rgba(255,153,51,0.3);
+    }
+    
+    /* Button Styles */
+    .stButton>button {
+        background: linear-gradient(45deg, #ff9933, #ff3366);
+        color: white;
+        border: none;
+        padding: 0.8rem 2rem;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .stButton>button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255,153,51,0.3);
+    }
+    
+    /* Suggestion Buttons */
+    .suggestion-button {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,153,51,0.3);
+        color: white;
+        padding: 0.8rem;
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 0.5rem;
+        backdrop-filter: blur(5px);
+    }
+    
+    .suggestion-button:hover {
+        background: rgba(255,153,51,0.2);
+        transform: translateY(-2px);
+    }
+    
+    /* Response Container */
+    .response-container {
+        background: rgba(255,255,255,0.05);
+        padding: 2rem;
+        border-radius: 20px;
+        margin-top: 2rem;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.1);
+        line-height: 1.8;
+    }
+    
+    /* Verse Box */
+    .verse-box {
+        background: rgba(255,153,51,0.1);
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin: 1rem 0;
+        border-left: 4px solid #ff9933;
+        transition: transform 0.2s ease;
+    }
+    
+    .verse-box:hover {
+        transform: translateX(5px);
+    }
+    
+    /* Footer */
+    .footer {
+        text-align: center;
+        padding: 2rem;
+        margin-top: 3rem;
+        background: rgba(255,255,255,0.05);
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+    }
+    
+    /* Loading Spinner */
+    .loading-spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .main-header h1 {
+            font-size: 2.5rem;
+        }
+        .suggestion-button {
+            font-size: 0.9rem;
+            padding: 0.6rem;
+        }
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# Main Layout with Enhanced Header
+st.markdown("""
+<div class="main-header">
+    <h1>🕉️ भगवद् गीता AI</h1>
+    <p>Seek Divine Wisdom Through Modern Technology</p>
 </div>
 """, unsafe_allow_html=True)
 
+# Create three columns for better layout
 col1, col2, col3 = st.columns([1, 2, 1])
 
 with col2:
+    # Search Container
     st.markdown('<div class="search-container">', unsafe_allow_html=True)
-
-    suggestions = [
-        "मन की शांति कैसे पाएं?",
-        "कर्म और धर्म के बारे में क्या कहती है गीता?",
-        "भय और चिंता को कैसे दूर करें?",
-        "सच्चे सुख का मार्ग क्या है?",
-        "जीवन में संतुलन कैसे बनाएं?"
-    ]
-
-    for suggestion in suggestions:
-        if st.button(suggestion, key=f"suggestion-{suggestion}"):
-            st.session_state.question = suggestion
-
+    
+    # Enhanced Search Box
     question = st.text_input(
         "",
-        placeholder="🔍 अपना प्रश्न यहाँ पूछें...",
-        key="question",
-        value=st.session_state.get('question', '')
+        placeholder="🔍 Ask your spiritual question here...",
+        help="Type your question and press Enter or click 'Seek Guidance'"
     )
+    
+    # Popular Questions Section
+    st.markdown("""
+    <p style='margin: 1.5rem 0 1rem 0; color: rgba(255,255,255,0.7);'>
+        Popular Questions
+    </p>
+    """, unsafe_allow_html=True)
+    
+    suggestions = [
+        "How can I find inner peace? 🧘",
+        "What is my life's purpose? 🎯",
+        "How to overcome fear? 💪",
+        "Guide me about Karma Yoga 🔄",
+        "How to maintain life balance? ⚖️"
+    ]
 
-    if st.button("🙏 दिव्य मार्गदर्शन प्राप्त करें", key="search"):
+    # Display suggestions in a grid
+    suggestion_cols = st.columns(2)
+    for idx, suggestion in enumerate(suggestions):
+        with suggestion_cols[idx % 2]:
+            if st.markdown(f"""
+                <div class="suggestion-button" onclick="handle_suggestion('{suggestion}')">
+                    {suggestion}
+                </div>
+                """, unsafe_allow_html=True):
+                question = suggestion
+                st.session_state.question = suggestion
+
+    # Seek Guidance Button
+    if st.button("🙏 Seek Divine Guidance", use_container_width=True):
         if question:
-            with st.spinner("दिव्य ज्ञान की प्राप्ति हो रही है... 🕉️"):
-                response = generate_response(question)
+            with st.spinner("॥ Seeking divine wisdom... ॥"):
+                verses = find_matching_verses(question)
+                response = generate_response(question, verses)
+                
+                # Display response in enhanced container
                 st.markdown(f"""
                 <div class="response-container">
-                    <div style="line-height: 1.8;">
-                        {response}
-                    </div>
+                    <div style="color: #ff9933; margin-bottom: 1rem;">॥ श्री कृष्ण उवाच ॥</div>
+                    {response.replace('\n', '<br>')}
                 </div>
                 """, unsafe_allow_html=True)
+                
+                # Display verses with enhanced styling
+                if verses:
+                    st.markdown("""
+                    <div style="margin: 2rem 0 1rem 0; color: #ff9933;">
+                        📜 Referenced Verses from Bhagavad Gita
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    for verse in verses:
+                        st.markdown(f"""
+                        <div class="verse-box">
+                            <div style="color: #ff9933; margin-bottom: 0.5rem;">
+                                Chapter {verse['chapter']}, Verse {verse['verse']}
+                            </div>
+                            <div style="color: rgba(255,255,255,0.9);">
+                                {verse['text']}
+                            </div>
+                        </div>
+                        """, unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True)
 
+# Enhanced Footer
 st.markdown("""
-<div class="footer-container">
-    <p>हमसे जुड़ें:</p>
-    <div class="social-links">
-        <a href="https://www.facebook.com/gjamtechnologies" target="_blank">Facebook</a>
-        <a href="https://twitter.com/gjamtech" target="_blank">Twitter</a>
-        <a href="https://www.linkedin.com/company/gjam-technologies" target="_blank">LinkedIn</a>
-        <a href="https://www.instagram.com/gjamtechnologies" target="_blank">Instagram</a>
+<div class="footer">
+    <div style="color: #ff9933; margin-bottom: 0.5rem;">॥ हरे कृष्ण ॥</div>
+    <div style="color: rgba(255,255,255,0.7);">
+        Made with ❤️ by Gjam Technologies
     </div>
-    <p>© 2024 Gjam Technologies. सर्वाधिकार सुरक्षित।</p>
 </div>
 """, unsafe_allow_html=True)
+
+# Keep the original Python functions (load_local_model, load_verses, find_matching_verses, generate_response)
+# as they were in your original code
