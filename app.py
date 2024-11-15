@@ -128,13 +128,13 @@ st.markdown("""
         font-size: 1.6rem;
     }
     .search-container {
-        background: #ffffff;
+        background: F000;
         padding: 2.5rem;
         border-radius: 15px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
     .response-container {
-        background: #ffffff;
+        background: #000;
         padding: 2.5rem;
         border-radius: 15px;
         margin-top: 2.5rem;
