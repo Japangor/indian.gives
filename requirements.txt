@@ -1,2 +1,4 @@
 pinecone-client
 openai
+faiss-cpu
+streamlit
