@@ -1,0 +1,71 @@
+/* Theme colors */
+:root {
+    --primary: #A8FF00;
+    --secondary: #0B0B45;
+    --accent: #1E1E66;
+}
+
+.stApp {
+    background-color: var(--secondary) !important;
+}
+
+.header-container {
+    text-align: center;
+    background: linear-gradient(45deg, var(--accent), var(--secondary));
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    animation: fadeIn 1s ease-out;
+}
+
+.search-container {
+    background: rgba(30, 30, 102, 0.7);
+    padding: 2rem;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.response-container {
+    background: rgba(30, 30, 102, 0.7);
+    padding: 2rem;
+    border-radius: 15px;
+    margin-top: 2rem;
+    color: white;
+}
+
+.verse-container {
+    background: rgba(30, 30, 102, 0.5);
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin: 1rem 0;
+    border-left: 4px solid var(--primary);
+}
+
+.stButton button {
+    background-color: var(--primary) !important;
+    color: var(--secondary) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 0.8rem 1.5rem !important;
+    transition: all 0.3s ease !important;
+    font-weight: bold !important;
+}
+
+.stButton button:hover {
+    transform: scale(1.05) !important;
+    box-shadow: 0 0 15px var(--primary) !important;
+}
+
+.stTextInput > div > div > input {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+    border: 2px solid var(--primary) !important;
+    border-radius: 10px !important;
+    padding: 1rem !important;
+    font-size: 1.1rem !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

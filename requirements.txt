@@ -1,4 +1,16 @@
 pinecone-client
 openai
-faiss-cpu
+streamlit 
+torch
+transformers
+openai
+scikit-learn
 streamlit
+pandas
+torch
+transformers
+sentence-transformers
+openai
+numpy
+accelerate
+bitsandbytes
