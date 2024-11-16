@@ -7,7 +7,6 @@ import sqlite3
 from datetime import datetime
 import requests
 from openai import OpenAI
-import stripe
 import webbrowser
 # Constants
 
@@ -210,39 +209,12 @@ def save_email(email: str, extra_credits: int = 0):
     
     # Create Stripe customer
     try:
-        customer = stripe.Customer.create(email=email)
         return subscribe_email(email)
     except Exception as e:
-        st.error(f"Error creating Stripe customer: {str(e)}")
         return False
 
 # ... (rest of the code remains the same)
 
-def create_checkout_session(email):
-    try:
-        checkout_session = stripe.checkout.Session.create(
-            customer_email=email,
-            payment_method_types=["card"],
-            line_items=[
-                {
-                    "price_data": {
-                        "currency": "usd",
-                        "product_data": {
-                            "name": "Gita GPT Premium",
-                        },
-                        "unit_amount": 1000,  # $10.00
-                    },
-                    "quantity": 1,
-                }
-            ],
-            mode="subscription",
-            success_url="https://your-website.com/success",
-            cancel_url="https://your-website.com/cancel",
-        )
-        return checkout_session.url
-    except Exception as e:
-        st.error(f"Error creating Stripe Checkout session: {str(e)}")
-        return None
 
 # Email functions
 def subscribe_email(email: str):
@@ -775,31 +747,6 @@ if trials_used >= 2 and 'email_submitted' not in st.session_state:
 st.markdown("""
 
 """, unsafe_allow_html=True)
-def create_checkout_session(email):
-    try:
-        checkout_session = stripe.checkout.Session.create(
-            customer_email=email,
-            payment_method_types=["card"],
-            line_items=[
-                {
-                    "price_data": {
-                        "currency": "usd",
-                        "product_data": {
-                            "name": "Gita GPT Premium",
-                        },
-                        "unit_amount": 1000,  # $10.00
-                    },
-                    "quantity": 1,
-                }
-            ],
-            mode="subscription",
-            success_url="https://your-website.com/success",
-            cancel_url="https://your-website.com/cancel",
-        )
-        return checkout_session.url
-    except Exception as e:
-        st.error(f"Error creating Stripe Checkout session: {str(e)}")
-        return None
 
 def get_or_create_session():
     if 'session_id' not in st.session_state:
