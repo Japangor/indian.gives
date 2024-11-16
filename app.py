@@ -14,6 +14,99 @@ OPENAI_API_KEY = None
 EMAILOCTOPUS_API_KEY = None
 EMAILOCTOPUS_LIST_ID = None
 HUGGINGFACE_API_KEY = None
+def setup_page_config():
+    st.set_page_config(
+        page_title="Gita GPT | Divine Wisdom Through AI | Bhagavad Gita Guidance",
+        page_icon="🕉️",
+        layout="wide",
+        initial_sidebar_state="expanded",
+        menu_items={
+            'Get Help': 'https://gjamtechnologies.com/help',
+            'Report a bug': "https://gjamtechnologies.com/contact",
+            'About': "# Gita GPT - Divine Wisdom Through Technology\nPowered by Gjam Technologies"
+        }
+    )
+
+# Add SEO meta tags
+def add_seo_tags():
+    st.markdown("""
+        <!-- SEO Meta Tags -->
+        <meta name="description" content="Experience divine wisdom through AI-powered Bhagavad Gita guidance. Get personalized spiritual insights, Sanskrit verses, and practical life guidance.">
+        <meta name="keywords" content="Gita GPT, Bhagavad Gita AI, spiritual guidance, Sanskrit wisdom, Krishna teachings, dharma guidance, meditation help, life guidance, Indian philosophy AI">
+        
+        <!-- Open Graph Meta Tags -->
+        <meta property="og:title" content="Gita GPT | Divine Wisdom Through AI">
+        <meta property="og:description" content="AI-powered spiritual guidance from the Bhagavad Gita">
+        <meta property="og:image" content="https://gjam.in/gita-gpt-og.jpg">
+        <meta property="og:url" content="https://gjam.in/gita-gpt">
+        
+        <!-- Twitter Card Meta Tags -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@japangor">
+        <meta name="twitter:title" content="Gita GPT | Divine Wisdom Through AI">
+        <meta name="twitter:description" content="Experience divine wisdom through AI-powered Bhagavad Gita guidance">
+        <meta name="twitter:image" content="https://gjam.in/gita-gpt-twitter.jpg">
+        
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Gita GPT",
+            "description": "AI-powered spiritual guidance from the Bhagavad Gita",
+            "applicationCategory": "SpiritualGuidance",
+            "operatingSystem": "Web",
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+            },
+            "provider": {
+                "@type": "Organization",
+                "name": "Gjam Technologies",
+                "url": "https://gjam.in"
+            }
+        }
+        </script>
+    """, unsafe_allow_html=True)
+
+# Branding Configuration
+BRAND_CONFIG = {
+    "name": "Gita GPT",
+    "company": "Gjam Technologies",
+    "website": "https://gjam.in",
+    "social_media": {
+        "facebook": "https://facebook.com/gjam13",
+        "twitter": "https://twitter.com/japangor",
+        "instagram": "https://instagram.com/japangor",
+        "linkedin": "https://linkedin.com/company/gjam-technologies"
+    },
+    "contact": {
+        "email": "contact@gjamtechnologies.com",
+        "phone": "+91 XXXXXXXXXX",
+        "address": "Your Address, City, State, India"
+    },
+    "colors": {
+        "primary": "#FF8F1C",
+        "secondary": "#FF5733",
+        "accent": "#ff9933",
+        "text": "#FFFFFF",
+        "background": "#1a0f2e"
+    }
+}
+
+# Add tracking code (Google Analytics)
+def add_tracking():
+    st.markdown("""
+        <!-- Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXX"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-XXXXXXXX');
+        </script>
+    """, unsafe_allow_html=True)
 def load_secrets():
     """Load secrets from Streamlit secrets or environment variables"""
     global OPENAI_API_KEY, EMAILOCTOPUS_API_KEY, EMAILOCTOPUS_LIST_ID, HUGGINGFACE_API_KEY
@@ -679,58 +772,59 @@ if trials_used < 2 or 'email_submitted' in st.session_state:
 
     st.markdown('<hr class="custom-divider">', unsafe_allow_html=True)
     # Question input
-    st.markdown("### 🔍 Ask Your Question")
-    question = st.text_input(
-        "",
-        placeholder="Type your question here...",
-        key="question",
-        value=st.session_state.get('question', '')
-    )
-    if st.button("🙏 Seek Divine Guidance", key="search"):
-                if question:
-                    with st.spinner("Connecting with divine wisdom... 🙏"):
-                        # Find matching verses
-                        matching_verses = find_matching_verses(question)
-                        
-                        # Generate response
-                        response = generate_response(question, matching_verses)
-                        
-                        # Increment trial count
-                        if trials_used < 2:
-                            increment_trial()
-                            trials_used = get_trials_used()  # Update the count
-                        
-                        # Display response in sections
-                        sections = response.split("\n\n")
-                        st.markdown(f"""
-                        <div class="response-container">
-                            <div style="line-height: 1.8;">
-                                {response}
-                            </div>
+# Question input
+st.markdown("### 🔍 Ask Your Question")
+question = st.text_input(
+    "",
+    placeholder="Type your question here...",
+    key="question_input",
+    value=st.session_state.get('question', '')
+)
+if st.button("🙏 Seek Divine Guidance", key="search_button"):  # Use a unique key here
+    if question:
+        with st.spinner("Connecting with divine wisdom... 🙏"):
+            # Find matching verses
+            matching_verses = find_matching_verses(question)
+            
+            # Generate response
+            response = generate_response(question, matching_verses)
+            
+            # Increment trial count
+            if trials_used < 2:
+                increment_trial()
+                trials_used = get_trials_used()  # Update the count
+            
+            # Display response in sections
+            sections = response.split("\n\n")
+            st.markdown(f"""
+            <div class="response-container">
+                <div style="line-height: 1.8;">
+                    {response}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Display matching verses with references
+            if matching_verses:
+                st.markdown("### 📜 Referenced Verses")
+                for verse in matching_verses:
+                    st.markdown(f"""
+                    <div class="verse-container">
+                        <div style="font-weight: bold; margin-bottom: 0.5rem;">
+                            Chapter {verse['chapter']}, Verse {verse['verse']}
                         </div>
-                        """, unsafe_allow_html=True)
-                        
-                        # Display matching verses with references
-                        if matching_verses:
-                            st.markdown("### 📜 Referenced Verses")
-                            for verse in matching_verses:
-                                st.markdown(f"""
-                                <div class="verse-container">
-                                    <div style="font-weight: bold; margin-bottom: 0.5rem;">
-                                        Chapter {verse['chapter']}, Verse {verse['verse']}
-                                    </div>
-                                    <div>
-                                        {verse['text']}
-                                    </div>
-                                </div>
-                                """, unsafe_allow_html=True)
-                        
-                        # Show trials remaining message
-                        if trials_used < 2:
-                            remaining = 2 - trials_used
-                            st.info(f"🔮 You have {remaining} divine consultations remaining in your free trial.")
-                else:
-                    st.warning("Please enter your question to seek guidance.")
+                        <div>
+                            {verse['text']}
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+            
+            # Show trials remaining message
+            if trials_used < 2:
+                remaining = 2 - trials_used
+                st.info(f"🔮 You have {remaining} divine consultations remaining in your free trial.")
+    else:
+        st.warning("Please enter your question to seek guidance.")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
