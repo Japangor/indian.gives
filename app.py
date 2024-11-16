@@ -66,7 +66,7 @@ def find_matching_verses(question: str, top_k: int = 3) -> List[Dict]:
 # Function to generate response using OpenAI API
 def generate_response(question: str, verses: List[Dict]) -> str:
     try:
-        openai.api_key = OPENAI_API_KEY
+        openai.api_key = secrets["OPENAI_API_KEY"]
         verses_context = "\n\n".join([
             f"Chapter {v['chapter']}, Verse {v['verse']}:\n{v['text']}"
             for v in verses
