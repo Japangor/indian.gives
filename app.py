@@ -7,7 +7,8 @@ import sqlite3
 from datetime import datetime
 import requests
 from openai import OpenAI
-
+import stripe
+import webbrowser
 # Constants
 
 OPENAI_API_KEY = None
@@ -199,14 +200,49 @@ def increment_trial():
     conn.commit()
     conn.close()
 
-def save_email(email: str):
+def save_email(email: str, extra_credits: int = 0):
     conn = sqlite3.connect('gita_users.db')
     c = conn.cursor()
-    c.execute("UPDATE user_sessions SET email = ? WHERE session_id = ?",
-             (email, st.session_state.session_id))
+    c.execute("UPDATE user_sessions SET email = ?, trials_used = trials_used - ? WHERE session_id = ?",
+             (email, extra_credits, st.session_state.session_id))
     conn.commit()
     conn.close()
-    return subscribe_email(email)
+    
+    # Create Stripe customer
+    try:
+        customer = stripe.Customer.create(email=email)
+        return subscribe_email(email)
+    except Exception as e:
+        st.error(f"Error creating Stripe customer: {str(e)}")
+        return False
+
+# ... (rest of the code remains the same)
+
+def create_checkout_session(email):
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            customer_email=email,
+            payment_method_types=["card"],
+            line_items=[
+                {
+                    "price_data": {
+                        "currency": "usd",
+                        "product_data": {
+                            "name": "Gita GPT Premium",
+                        },
+                        "unit_amount": 1000,  # $10.00
+                    },
+                    "quantity": 1,
+                }
+            ],
+            mode="subscription",
+            success_url="https://your-website.com/success",
+            cancel_url="https://your-website.com/cancel",
+        )
+        return checkout_session.url
+    except Exception as e:
+        st.error(f"Error creating Stripe Checkout session: {str(e)}")
+        return None
 
 # Email functions
 def subscribe_email(email: str):
@@ -702,19 +738,38 @@ if trials_used >= 2 and 'email_submitted' not in st.session_state:
     To continue receiving guidance, please enter your email below.
     """)
     email = st.text_input("Email Address")
+    
+    st.markdown("### 🌟 Follow Us and Earn Extra Credits!")
+    st.markdown("Follow our social media accounts to receive additional divine consultations.")
+    
+    extra_credits = 0
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        if st.button("Follow on Facebook"):
+            webbrowser.open_new_tab("https://www.facebook.com/gjam13")
+            extra_credits += 1
+    with col2:  
+        if st.button("Follow on Twitter"):
+            webbrowser.open_new_tab("https://twitter.com/japangor")
+            extra_credits += 1
+    with col3:
+        if st.button("Follow on Instagram"):
+            webbrowser.open_new_tab("https://www.instagram.com/japangor")
+            extra_credits += 1
+    
     if st.button("Continue Journey", key="email_submit"):
         if email and '@' in email:
-            if save_email(email):
+            if save_email(email, extra_credits):
                 st.session_state.email_submitted = True
-                st.success("🙏 Thank you! You may continue seeking wisdom.")
+                st.success(f"🙏 Thank you! You've earned {extra_credits} extra divine consultations. Continue seeking wisdom.")
                 st.rerun()
             else:
                 st.error("Unable to process your email. Please try again.")
         else:
             st.error("Please enter a valid email address")
+    
     st.markdown('</div>', unsafe_allow_html=True)
 
-# Main interface
 if trials_used < 2 or 'email_submitted' in st.session_state:
     st.markdown('<div class="main-container">', unsafe_allow_html=True)
     
@@ -899,7 +954,31 @@ st.markdown("""
     <p style="font-size: 0.8rem; color: rgba(255,255,255,0.6);">© 2024 All rights reserved.</p>
 </div>
 """, unsafe_allow_html=True)
-
+def create_checkout_session(email):
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            customer_email=email,
+            payment_method_types=["card"],
+            line_items=[
+                {
+                    "price_data": {
+                        "currency": "usd",
+                        "product_data": {
+                            "name": "Gita GPT Premium",
+                        },
+                        "unit_amount": 1000,  # $10.00
+                    },
+                    "quantity": 1,
+                }
+            ],
+            mode="subscription",
+            success_url="https://your-website.com/success",
+            cancel_url="https://your-website.com/cancel",
+        )
+        return checkout_session.url
+    except Exception as e:
+        st.error(f"Error creating Stripe Checkout session: {str(e)}")
+        return None
 # Session management
 def get_or_create_session():
     if 'session_id' not in st.session_state:
