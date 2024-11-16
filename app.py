@@ -746,15 +746,15 @@ if trials_used >= 2 and 'email_submitted' not in st.session_state:
     col1, col2, col3 = st.columns(3)
     with col1:
         if st.button("Follow on Facebook"):
-            webbrowser.open_new_tab("https://www.facebook.com/gjam13")
+            webbrowser.open_new_tab("https://www.facebook.com/your_facebook_page")
             extra_credits += 1
     with col2:  
         if st.button("Follow on Twitter"):
-            webbrowser.open_new_tab("https://twitter.com/japangor")
+            webbrowser.open_new_tab("https://twitter.com/your_twitter_handle")
             extra_credits += 1
     with col3:
         if st.button("Follow on Instagram"):
-            webbrowser.open_new_tab("https://www.instagram.com/japangor")
+            webbrowser.open_new_tab("https://www.instagram.com/your_instagram_handle")
             extra_credits += 1
     
     if st.button("Continue Journey", key="email_submit"):
@@ -770,189 +770,10 @@ if trials_used >= 2 and 'email_submitted' not in st.session_state:
     
     st.markdown('</div>', unsafe_allow_html=True)
 
-if trials_used < 2 or 'email_submitted' in st.session_state:
-    st.markdown('<div class="main-container">', unsafe_allow_html=True)
-    
-    # Popular questions
-    st.subheader("🔮 Popular Questions")
-    suggestions = [
-        ("मैं जीवन में शांति कैसे पा सकता हूं?", "How can I find peace in life?"),
-        ("कर्म और धर्म के बारे में गीता क्या कहती है?", "What does Gita say about karma and dharma?"),
-        ("भय और चिंता को कैसे दूर करें?", "How to overcome fear and anxiety?"),
-        ("सच्चे सुख का मार्ग क्या है?", "What is the path to true happiness?"),
-        ("जीवन में संतुलन कैसे बनाएं?", "How to maintain balance in life?")
-    ]
-
-    # Add custom CSS for suggestion buttons
-    st.markdown("""
-    <style>
-    .suggestion-button {
-        background: linear-gradient(135deg, rgba(255,143,28,0.1), rgba(255,87,51,0.1));
-        border: 1px solid rgba(255,143,28,0.3);
-        border-radius: 10px;
-        padding: 1rem;
-        margin-bottom: 0.8rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    
-    .suggestion-button:hover {
-        background: linear-gradient(135deg, rgba(255,143,28,0.2), rgba(255,87,51,0.2));
-        transform: translateY(-2px);
-    }
-    
-    .hindi-text {
-        font-size: 1.1rem;
-        color: #FF8F1C;
-        margin-bottom: 0.3rem;
-    }
-    
-    .english-text {
-        font-size: 0.9rem;
-        color: rgba(255,255,255,0.9);
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-    col1, col2 = st.columns(2)
-    for i, (hindi, english) in enumerate(suggestions):
-        with col1 if i % 2 == 0 else col2:
-            if st.button(
-                f"{hindi}\n{english}", 
-                key=f"suggestion_{i}",
-                help=english,
-                use_container_width=True
-            ):
-                st.session_state.question = english
-
-    st.markdown('<hr class="custom-divider">', unsafe_allow_html=True)
-    # Question input
-# Question input
-st.markdown("### 🔍 Ask Your Question")
-question = st.text_input(
-    "",
-    placeholder="Type your question here...",
-    key="question_input",
-    value=st.session_state.get('question', '')
-)
-if st.button("🙏 Seek Divine Guidance", key="search_button"):  # Use a unique key here
-    if question:
-        with st.spinner("Connecting with divine wisdom... 🙏"):
-            # Find matching verses
-            matching_verses = find_matching_verses(question)
-            
-            # Generate response
-            response = generate_response(question, matching_verses)
-            
-            # Increment trial count
-            if trials_used < 2:
-                increment_trial()
-                trials_used = get_trials_used()  # Update the count
-            
-            # Display response in sections
-            sections = response.split("\n\n")
-            st.markdown(f"""
-            <div class="response-container">
-                <div style="line-height: 1.8;">
-                    {response}
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            # Display matching verses with references
-            if matching_verses:
-                st.markdown("### 📜 Referenced Verses")
-                for verse in matching_verses:
-                    st.markdown(f"""
-                    <div class="verse-container">
-                        <div style="font-weight: bold; margin-bottom: 0.5rem;">
-                            Chapter {verse['chapter']}, Verse {verse['verse']}
-                        </div>
-                        <div>
-                            {verse['text']}
-                        </div>
-                    </div>
-                    """, unsafe_allow_html=True)
-            
-            # Show trials remaining message
-            if trials_used < 2:
-                remaining = 2 - trials_used
-                st.info(f"🔮 You have {remaining} divine consultations remaining in your free trial.")
-    else:
-        st.warning("Please enter your question to seek guidance.")
-
-    st.markdown('</div>', unsafe_allow_html=True)
-
-# Additional Resources Section
-if trials_used < 2 or 'email_submitted' in st.session_state:
-    st.markdown('<div class="main-container">', unsafe_allow_html=True)
-    st.markdown("### 📚 Additional Resources")
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.markdown("""
-        #### 🎯 Quick Links
-        - Daily Wisdom
-        - Meditation Guide
-        - Sacred Symbols
-        - Spiritual Practices
-        """)
-    
-    with col2:
-        st.markdown("""
-        #### 🌟 Popular Topics
-        - Karma Yoga
-        - Bhakti Path
-        - Self-Realization
-        - Divine Love
-        """)
-    
-    with col3:
-        st.markdown("""
-        #### 🔔 Stay Connected
-        - Join Newsletter
-        - Daily Verses
-        - Community Events
-        - Spiritual Updates
-        """)
-    
-    st.markdown('</div>', unsafe_allow_html=True)
 
 # Footer
 st.markdown("""
-<div class="footer">
-    <div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem;">
-        <a href="#" style="color: #ff9933; text-decoration: none;">About</a>
-        <a href="#" style="color: #ff9933; text-decoration: none;">Privacy</a>
-        <a href="#" style="color: #ff9933; text-decoration: none;">Terms</a>
-        <a href="#" style="color: #ff9933; text-decoration: none;">Contact</a>
-    </div>
-    <div style="margin: 1rem 0;">
-        <span style="margin: 0 1rem;">
-            <a href="https://fb.com/japangor" style="color: #ff9933; text-decoration: none;">
-                <i class="fab fa-facebook"></i>
-            </a>
-        </span>
-        <span style="margin: 0 1rem;">
-            <a href="https://x.com/japangor" style="color: #ff9933; text-decoration: none;">
-                <i class="fab fa-twitter"></i>
-            </a>
-        </span>
-        <span style="margin: 0 1rem;">
-            <a href="https://instagram.com/japangor" style="color: #ff9933; text-decoration: none;">
-                <i class="fab fa-instagram"></i>
-            </a>
-        </span>
-        <span style="margin: 0 1rem;">
-            <a href="#" style="color: #ff9933; text-decoration: none;">
-                <i class="fab fa-linkedin"></i>
-            </a>
-        </span>
-    </div>
-    <p>🕉️ Gjam Technologies | Divine Wisdom Through Technology</p>
-    <p style="font-size: 0.8rem; color: rgba(255,255,255,0.6);">© 2024 All rights reserved.</p>
-</div>
+
 """, unsafe_allow_html=True)
 def create_checkout_session(email):
     try:
@@ -979,7 +800,7 @@ def create_checkout_session(email):
     except Exception as e:
         st.error(f"Error creating Stripe Checkout session: {str(e)}")
         return None
-# Session management
+
 def get_or_create_session():
     if 'session_id' not in st.session_state:
         st.session_state.session_id = str(datetime.now().timestamp())
@@ -1025,6 +846,8 @@ suggestions = [
     "जीवन में संतुलन कैसे बनाएं? | How to maintain balance in life?"
 ]
 
+# ... (previous code remains the same)
+
 if trials_used < 2 or 'email_submitted' in st.session_state:
     st.markdown('<div class="main-container">', unsafe_allow_html=True)
     
@@ -1038,11 +861,72 @@ if trials_used < 2 or 'email_submitted' in st.session_state:
         "How to maintain balance in life?"
     ]
 
-    col1, col2 = st.columns(2)
-    for i, suggestion in enumerate(suggestions):
-        with col1 if i % 2 == 0 else col2:
-            if st.button(suggestion, key=f"suggestion-{suggestion}"):
-                st.session_state.question = suggestion
+
+    def update_suggestions():
+        global suggestions
+        suggestions = random.sample(suggestions, len(suggestions))
+
+    # Set up a timer to update suggestions every 5 seconds
+    suggestion_placeholder = st.empty()
+
+    def update_suggestion_ui():
+        with suggestion_placeholder.container():
+            col1, col2 = st.columns(2)
+            for i, suggestion in enumerate(suggestions):
+                with col1 if i % 2 == 0 else col2:
+                    if st.button(suggestion, key=f"suggestion-{suggestion}"):
+                        st.session_state.question = suggestion
+                        # Trigger the search directly instead of using st.experimental_rerun()
+                        if st.session_state.question:
+                            with st.spinner("Connecting with divine wisdom... 🙏"):
+                                # Find matching verses
+                                matching_verses = find_matching_verses(st.session_state.question)
+                                
+                                # Generate response
+                                response = generate_response(st.session_state.question, matching_verses)
+                                
+                                # Increment trial count
+                                if trials_used < 2:
+                                    increment_trial()
+                                    trials_used = get_trials_used()  # Update the count
+                                
+                                # Display response in sections
+                                sections = response.split("\n\n")
+                                st.markdown(f"""
+                                <div class="response-container">
+                                    <div style="line-height: 1.8;">
+                                        {response}
+                                    </div>
+                                </div>
+                                """, unsafe_allow_html=True)
+                                
+                                # Display matching verses with references
+                                if matching_verses:
+                                    st.markdown("### 📜 Referenced Verses")
+                                    for verse in matching_verses:
+                                        st.markdown(f"""
+                                        <div class="verse-container">
+                                            <div style="font-weight: bold; margin-bottom: 0.5rem;">
+                                                Chapter {verse['chapter']}, Verse {verse['verse']}
+                                            </div>
+                                            <div>
+                                                {verse['text']}
+                                            </div>
+                                        </div>
+                                        """, unsafe_allow_html=True)
+                                
+                                # Show trials remaining message
+                                if trials_used < 2:
+                                    remaining = 2 - trials_used
+                                    st.info(f"🔮 You have {remaining} divine consultations remaining in your free trial.")
+
+    update_suggestion_ui()
+
+    # Start the timer to update suggestions every 5 seconds
+    st.sidebar.markdown("### 🔄 Refresh Suggestions")
+    if st.sidebar.button("Refresh"):
+        update_suggestions()
+        update_suggestion_ui()
 
     st.markdown('<hr class="custom-divider">', unsafe_allow_html=True)
 
@@ -1055,53 +939,54 @@ if trials_used < 2 or 'email_submitted' in st.session_state:
         value=st.session_state.get('question', '')
     )
     if st.button("🙏 Seek Divine Guidance", key="search"):
-                if question:
-                    with st.spinner("Connecting with divine wisdom... 🙏"):
-                        # Find matching verses
-                        matching_verses = find_matching_verses(question)
-                        
-                        # Generate response
-                        response = generate_response(question, matching_verses)
-                        
-                        # Increment trial count
-                        if trials_used < 2:
-                            increment_trial()
-                            trials_used = get_trials_used()  # Update the count
-                        
-                        # Display response in sections
-                        sections = response.split("\n\n")
+        if question:
+            with st.spinner("Connecting with divine wisdom... 🙏"):
+                # Find matching verses
+                matching_verses = find_matching_verses(question)
+                
+                # Generate response
+                response = generate_response(question, matching_verses)
+                
+                # Increment trial count
+                if trials_used < 2:
+                    increment_trial()
+                    trials_used = get_trials_used()  # Update the count
+                
+                # Display response in sections
+                sections = response.split("\n\n")
+                st.markdown(f"""
+                <div class="response-container">
+                    <div style="line-height: 1.8;">
+                        {response}
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Display matching verses with references
+                if matching_verses:
+                    st.markdown("### 📜 Referenced Verses")
+                    for verse in matching_verses:
                         st.markdown(f"""
-                        <div class="response-container">
-                            <div style="line-height: 1.8;">
-                                {response}
+                        <div class="verse-container">
+                            <div style="font-weight: bold; margin-bottom: 0.5rem;">
+                                Chapter {verse['chapter']}, Verse {verse['verse']}
+                            </div>
+                            <div>
+                                {verse['text']}
                             </div>
                         </div>
                         """, unsafe_allow_html=True)
-                        
-                        # Display matching verses with references
-                        if matching_verses:
-                            st.markdown("### 📜 Referenced Verses")
-                            for verse in matching_verses:
-                                st.markdown(f"""
-                                <div class="verse-container">
-                                    <div style="font-weight: bold; margin-bottom: 0.5rem;">
-                                        Chapter {verse['chapter']}, Verse {verse['verse']}
-                                    </div>
-                                    <div>
-                                        {verse['text']}
-                                    </div>
-                                </div>
-                                """, unsafe_allow_html=True)
-                        
-                        # Show trials remaining message
-                        if trials_used < 2:
-                            remaining = 2 - trials_used
-                            st.info(f"🔮 You have {remaining} divine consultations remaining in your free trial.")
-                else:
-                    st.warning("Please enter your question to seek guidance.")
+                
+                # Show trials remaining message
+                if trials_used < 2:
+                    remaining = 2 - trials_used
+                    st.info(f"🔮 You have {remaining} divine consultations remaining in your free trial.")
+        else:
+            st.warning("Please enter your question to seek guidance.")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
+# ... (rest of the code remains the same)
 # Additional Resources Section
 if trials_used < 2 or 'email_submitted' in st.session_state:
     st.markdown('<div class="main-container">', unsafe_allow_html=True)
