@@ -2,23 +2,36 @@ import os
 import openai
 import streamlit as st
 import pandas as pd
+from typing import List, Dict
+import sqlite3
+from datetime import datetime
+import requests
 
-# Streamlit page configuration
-st.set_page_config(
-    page_title="Bhagavad Gita GPT | Divine Wisdom Through AI | Gjam Technologies",
-    page_icon="😍",
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
+# Constants
+OPENAI_API_KEY = "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"
+EMAILOCTOPUS_API_KEY = "eo_46714b6ebb21e01fe89894213c14202429a9dcfd710ed95a4c51ef24e011caf1"
+EMAILOCTOPUS_LIST_ID = "eddc64ac-0e61-11ef-84db-09f6f"
+
+# Initialize SQLite database for email tracking
+def init_db():
+    conn = sqlite3.connect('gita_users.db', check_same_thread=False)
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS user_sessions
+                 (session_id TEXT PRIMARY KEY, 
+                  trials_used INTEGER DEFAULT 0,
+                  email TEXT NULL,
+                  created_at TEXT)''')
+    conn.commit()
+    conn.close()
 
 # Load verses function
 @st.cache_data
-def load_verses():
+def load_verses() -> tuple[pd.DataFrame, Dict]:
     try:
         df = pd.read_csv("only_verses.csv", index_col=0)
         verses_dict = {}
         for idx, row in df.iterrows():
-            chapter = str(idx // 1000)  # Assuming 1000 verses per chapter
+            chapter = str(idx // 1000)
             verse = str(idx % 1000)
             if chapter not in verses_dict:
                 verses_dict[chapter] = {}
@@ -28,11 +41,8 @@ def load_verses():
         st.error(f"Error loading verses: {str(e)}")
         return None, None
 
-# Load verses data
-verses_df, verses_dict = load_verses()
-
 # Function to find matching verses
-def find_matching_verses(question: str, top_k: int = 3) -> list:
+def find_matching_verses(question: str, top_k: int = 3) -> List[Dict]:
     try:
         question_words = set(question.lower().split())
         matches = []
@@ -54,9 +64,9 @@ def find_matching_verses(question: str, top_k: int = 3) -> list:
         return []
 
 # Function to generate response using OpenAI API
-def generate_response(question: str, verses: list) -> str:
+def generate_response(question: str, verses: List[Dict]) -> str:
     try:
-        openai.api_key = os.getenv("OPENAI_API_KEY")
+        openai.api_key = OPENAI_API_KEY
         verses_context = "\n\n".join([
             f"Chapter {v['chapter']}, Verse {v['verse']}:\n{v['text']}"
             for v in verses
@@ -88,122 +98,280 @@ Please provide a response structured as follows:
 Make the response personal, inspiring, and filled with divine wisdom."""
 
         response = openai.ChatCompletion.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "user", "content": prompt}
-            ],
+            model="gpt-4",
+            messages=[{"role": "user", "content": prompt}],
             max_tokens=1000,
             n=1,
             temperature=0.7,
         )
-
+        
         return response.choices[0].message['content'].strip()
 
     except Exception as e:
         st.error(f"Error generating response: {str(e)}")
-        return "I apologize, but I am unable to provide guidance at this moment. Please try again."
+        return "🙏 I apologize, but I am unable to provide guidance at this moment. Please try again."
 
-# CSS styles for the page
+# EmailOctopus integration for email capture
+def subscribe_email(email: str):
+    url = f"https://emailoctopus.com/api/1.6/lists/{EMAILOCTOPUS_LIST_ID}/contacts"
+    data = {
+        "api_key": EMAILOCTOPUS_API_KEY,
+        "email_address": email,
+        "status": "SUBSCRIBED",
+        "tags": ["Gita GPT User"]
+    }
+    
+    try:
+        response = requests.post(url, json=data)
+        return response.status_code == 200
+    except Exception as e:
+        st.error(f"Error in email subscription: {str(e)}")
+        return False
+
+# Session management functions
+def get_or_create_session():
+    if 'session_id' not in st.session_state:
+        st.session_state.session_id = str(datetime.now().timestamp())
+        conn = sqlite3.connect('gita_users.db')
+        c = conn.cursor()
+        c.execute("INSERT INTO user_sessions (session_id, trials_used, created_at) VALUES (?, 0, ?)",
+                 (st.session_state.session_id, datetime.now().isoformat()))
+        conn.commit()
+        conn.close()
+    return st.session_state.session_id
+
+def get_trials_used():
+    conn = sqlite3.connect('gita_users.db')
+    c = conn.cursor()
+    c.execute("SELECT trials_used FROM user_sessions WHERE session_id = ?", 
+             (st.session_state.session_id,))
+    result = c.fetchone()
+    conn.close()
+    return result[0] if result else 0
+
+def increment_trial():
+    conn = sqlite3.connect('gita_users.db')
+    c = conn.cursor()
+    c.execute("UPDATE user_sessions SET trials_used = trials_used + 1 WHERE session_id = ?",
+             (st.session_state.session_id,))
+    conn.commit()
+    conn.close()
+
+def save_email(email: str):
+    conn = sqlite3.connect('gita_users.db')
+    c = conn.cursor()
+    c.execute("UPDATE user_sessions SET email = ? WHERE session_id = ?",
+             (email, st.session_state.session_id))
+    conn.commit()
+    conn.close()
+    return subscribe_email(email)
+
+# Initialize database and load verses
+init_db()
+verses_df, verses_dict = load_verses()
+
+# Streamlit page configuration
+
+
+# Custom CSS with Indian theme
 st.markdown("""
 <style>
-    body {
-        background-color: #f0f2f6;
-        font-family: 'Arial', sans-serif;
-    }
-    .header-container {
-        background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
-        padding: 3rem;
-        border-radius: 12px;
-        text-align: center;
-        margin-bottom: 2.5rem;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .header-container h1 {
+    /* Global Theme */
+    [data-testid="stAppViewContainer"] {
+        background: linear-gradient(135deg, #1a0f2e 0%, #2d1b4e 100%);
         color: #fff;
+    }
+    
+    /* Om Symbol Animation */
+    @keyframes glowingOm {
+        0% { text-shadow: 0 0 5px #ff9933; }
+        50% { text-shadow: 0 0 20px #ff9933, 0 0 30px #ff9933; }
+        100% { text-shadow: 0 0 5px #ff9933; }
+    }
+    
+    .om-symbol {
         font-size: 3.5rem;
-        font-weight: bold;
-    }
-    .header-container p {
-        color: #f0f2f6;
-        font-size: 1.6rem;
-    }
-    .search-container {
-        background: F000;
-        padding: 2.5rem;
-        border-radius: 15px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-    .response-container {
-        background: #000;
-        padding: 2.5rem;
-        border-radius: 15px;
-        margin-top: 2.5rem;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-    .verse-container {
-        padding: 1.5rem;
-        border-radius: 8px;
-        margin-bottom: 1.5rem;
-        border-left: 5px solid #6a11cb;
-    }
-    .footer-container {
-        margin-top: 3rem;
+        animation: glowingOm 2s infinite;
+        color: #ff9933;
         text-align: center;
-        padding-bottom: 2rem;
+        margin-bottom: 1rem;
     }
-    .footer-container p {
-        font-size: 1.4rem;
-        color: #666;
+    
+    /* Header Styles */
+    .header-container {
+        background: linear-gradient(90deg, #ff9933 0%, #ff5733 100%);
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(255, 153, 51, 0.2);
     }
-    .social-links a {
-        margin: 0 1.2rem;
-        color: #6a11cb;
-        font-size: 1.8rem;
-        text-decoration: none;
-        transition: color 0.3s ease;
+    
+    /* Main Container */
+    .main-container {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 2rem;
+        border-radius: 15px;
+        border: 1px solid rgba(255, 153, 51, 0.2);
+        backdrop-filter: blur(10px);
+        margin-bottom: 2rem;
     }
-    .social-links a:hover {
-        color: #2575fc;
+    
+    /* Question Container */
+    .question-container {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin: 1rem 0;
     }
-    .button-style {
-        background-color: #6a11cb;
-        color: #ffffff;
-        border: none;
+    
+    /* Response Container */
+    .response-container {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 2rem;
+        border-radius: 15px;
+        margin-top: 1.5rem;
+        border: 1px solid rgba(255, 153, 51, 0.3);
+        line-height: 1.8;
+    }
+    
+    /* Verse Container */
+    .verse-container {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin: 1rem 0;
+        border-left: 4px solid #ff9933;
+    }
+    
+    /* Email Form */
+    .email-form {
+        background: rgba(255, 153, 51, 0.1);
+        padding: 2.5rem;
+        border-radius: 15px;
+        text-align: center;
+        margin: 2rem 0;
+        border: 1px solid rgba(255, 153, 51, 0.3);
+    }
+    
+    /* Buttons */
+    .stButton > button {
+        background: linear-gradient(90deg, #ff9933 0%, #ff5733 100%);
+        color: white;
         padding: 0.75rem 1.5rem;
         border-radius: 8px;
-        font-size: 1rem;
+        border: none;
         font-weight: bold;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
+        transition: all 0.3s ease;
     }
-    .button-style:hover {
-        background-color: #2575fc;
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 153, 51, 0.3);
     }
-    .text-input-style {
-        width: 100%;
-        padding: 1rem;
+    
+    /* Input Fields */
+    .stTextInput > div > div > input {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 153, 51, 0.3);
+        color: white;
         border-radius: 8px;
-        border: 1px solid #d1d5db;
-        font-size: 1rem;
+        padding: 1rem;
+    }
+    
+    /* Sidebar */
+    [data-testid="stSidebar"] {
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+    }
+    
+    /* Progress Bar */
+    .stProgress > div > div > div {
+        background: linear-gradient(90deg, #ff9933 0%, #ff5733 100%);
+    }
+    
+    /* Custom Divider */
+    .custom-divider {
+        border: 0;
+        height: 1px;
+        background: linear-gradient(90deg, 
+            rgba(255,153,51,0) 0%,
+            rgba(255,153,51,0.3) 50%,
+            rgba(255,153,51,0) 100%);
+        margin: 2rem 0;
+    }
+    
+    /* Footer */
+    .footer {
+        text-align: center;
+        padding: 2rem;
+        background: rgba(0, 0, 0, 0.2);
+        border-top: 1px solid rgba(255, 153, 51, 0.2);
+        margin-top: 3rem;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# Header section
-st.markdown("""
-<div class="header-container">
-    <h1>🙏 Bhagavad Gita GPT</h1>
-    <p>Gjam Technologies | Seek Divine Wisdom Through AI</p>
-</div>
-""", unsafe_allow_html=True)
+# Session initialization
+session_id = get_or_create_session()
+trials_used = get_trials_used()
 
-# Main interface for user input
-col1, col2, col3 = st.columns([1, 2, 1])
+# Sidebar
+with st.sidebar:
+    st.image("Search.png", width=150)
+    st.markdown("### 🕉️ Gita GPT")
+    st.markdown("---")
+    st.progress(trials_used / 2, f"Trials: {trials_used}/2")
+    if trials_used >= 2 and 'email_submitted' not in st.session_state:
+        st.warning("⚠️ Free trials completed")
+    st.markdown("---")
+    st.markdown("""
+    ### About
+    Get divine guidance from the timeless wisdom of Bhagavad Gita, powered by advanced AI.
+    
+    ### Features
+    • AI-powered spiritual guidance
+    • Relevant verse references
+    • Practical wisdom
+    • Sanskrit translations
+    
+    _By Gjam Technologies_
+    """)
 
-with col2:
-    st.markdown('<div class="search-container">', unsafe_allow_html=True)
+# Main Content
+st.markdown('<div class="header-container">', unsafe_allow_html=True)
+st.markdown('<div class="om-symbol">🕉️</div>', unsafe_allow_html=True)
+st.title("Gita GPT")
+st.subheader("Divine Wisdom Through Advanced AI")
+st.markdown('</div>', unsafe_allow_html=True)
 
-    # Suggestions for users
+# Email capture form if trials exceeded
+if trials_used >= 2 and 'email_submitted' not in st.session_state:
+    st.markdown('<div class="email-form">', unsafe_allow_html=True)
+    st.markdown("### 🙏 Continue Your Spiritual Journey")
+    st.markdown("""
+    You've experienced the divine wisdom of Gita GPT. 
+    To continue receiving guidance, please enter your email below.
+    """)
+    email = st.text_input("Email Address")
+    if st.button("Continue Journey", key="email_submit"):
+        if email and '@' in email:
+            if save_email(email):
+                st.session_state.email_submitted = True
+                st.success("🙏 Thank you! You may continue seeking wisdom.")
+                st.rerun()
+            else:
+                st.error("Unable to process your email. Please try again.")
+        else:
+            st.error("Please enter a valid email address")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# Main interface
+if trials_used < 2 or 'email_submitted' in st.session_state:
+    st.markdown('<div class="main-container">', unsafe_allow_html=True)
+    
+    # Popular questions
+    st.subheader("🔮 Popular Questions")
     suggestions = [
         "How can I find inner peace in difficult times?",
         "What does the Gita say about duty and dharma?",
@@ -212,73 +380,149 @@ with col2:
         "How to maintain balance in life?"
     ]
 
-    for suggestion in suggestions:
-        if st.button(suggestion, key=f"suggestion-{suggestion}", help="Click to use this question"):
-            st.session_state.question = suggestion
+    col1, col2 = st.columns(2)
+    for i, suggestion in enumerate(suggestions):
+        with col1 if i % 2 == 0 else col2:
+            if st.button(suggestion, key=f"suggestion-{suggestion}"):
+                st.session_state.question = suggestion
 
-    # Input for user's question
+    st.markdown('<hr class="custom-divider">', unsafe_allow_html=True)
+
+    # Question input
+    st.markdown("### 🔍 Ask Your Question")
     question = st.text_input(
         "",
-        placeholder="🔍 Ask your question here...",
+        placeholder="Type your question here...",
         key="question",
-        value=st.session_state.get('question', ''),
-        help="Type your question to seek divine guidance"
+        value=st.session_state.get('question', '')
     )
-
-    # Button to get guidance
-    if st.button("🙏 Seek Divine Guidance", key="search", help="Click to receive divine wisdom"):
-        if question:
-            with st.spinner("Seeking divine wisdom... 🙏"):
-                # Find relevant verses and generate response
-                matching_verses = find_matching_verses(question)
-                response = generate_response(question, matching_verses)
-                
-                # Display generated response
-                st.markdown(f"""
-                <div class="response-container">
-                    <div style="line-height: 1.8;">
-                        {response}
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
-                
-                # Display matching verses
-                if matching_verses:
-                    st.markdown("""
-                    <h4 style="margin-top: 2rem;">Referenced Verses</h4>
-                    """, unsafe_allow_html=True)
-                    for verse in matching_verses:
+    if st.button("🙏 Seek Divine Guidance", key="search"):
+                if question:
+                    with st.spinner("Connecting with divine wisdom... 🙏"):
+                        # Find matching verses
+                        matching_verses = find_matching_verses(question)
+                        
+                        # Generate response
+                        response = generate_response(question, matching_verses)
+                        
+                        # Increment trial count
+                        if trials_used < 2:
+                            increment_trial()
+                            trials_used = get_trials_used()  # Update the count
+                        
+                        # Display response in sections
+                        sections = response.split("\n\n")
                         st.markdown(f"""
-                        <div class="verse-container">
-                            <div style="font-weight: bold; margin-bottom: 0.5rem;">
-                                Chapter {verse['chapter']}, Verse {verse['verse']}
-                            </div>
-                            <div>
-                                {verse['text']}
+                        <div class="response-container">
+                            <div style="line-height: 1.8;">
+                                {response}
                             </div>
                         </div>
                         """, unsafe_allow_html=True)
+                        
+                        # Display matching verses with references
+                        if matching_verses:
+                            st.markdown("### 📜 Referenced Verses")
+                            for verse in matching_verses:
+                                st.markdown(f"""
+                                <div class="verse-container">
+                                    <div style="font-weight: bold; margin-bottom: 0.5rem;">
+                                        Chapter {verse['chapter']}, Verse {verse['verse']}
+                                    </div>
+                                    <div>
+                                        {verse['text']}
+                                    </div>
+                                </div>
+                                """, unsafe_allow_html=True)
+                        
+                        # Show trials remaining message
+                        if trials_used < 2:
+                            remaining = 2 - trials_used
+                            st.info(f"🔮 You have {remaining} divine consultations remaining in your free trial.")
+                else:
+                    st.warning("Please enter your question to seek guidance.")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# Footer section
+# Additional Resources Section
+if trials_used < 2 or 'email_submitted' in st.session_state:
+    st.markdown('<div class="main-container">', unsafe_allow_html=True)
+    st.markdown("### 📚 Additional Resources")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("""
+        #### 🎯 Quick Links
+        - Daily Wisdom
+        - Meditation Guide
+        - Sacred Symbols
+        - Spiritual Practices
+        """)
+    
+    with col2:
+        st.markdown("""
+        #### 🌟 Popular Topics
+        - Karma Yoga
+        - Bhakti Path
+        - Self-Realization
+        - Divine Love
+        """)
+    
+    with col3:
+        st.markdown("""
+        #### 🔔 Stay Connected
+        - Join Newsletter
+        - Daily Verses
+        - Community Events
+        - Spiritual Updates
+        """)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# Footer
 st.markdown("""
-<div class="footer-container">
-    <p>Connect with us on social media:</p>
-    <div class="social-links">
-        <a href="https://www.facebook.com/gjamtechnologies" target="_blank">
-            <i class="fab fa-facebook"></i>
-        </a>
-        <a href="https://twitter.com/gjamtech" target="_blank">
-            <i class="fab fa-twitter"></i>
-        </a>
-        <a href="https://www.linkedin.com/company/gjam-technologies" target="_blank">
-            <i class="fab fa-linkedin"></i>
-        </a>
-        <a href="https://www.instagram.com/gjamtechnologies" target="_blank">
-            <i class="fab fa-instagram"></i>
-        </a>
+<div class="footer">
+    <div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem;">
+        <a href="#" style="color: #ff9933; text-decoration: none;">About</a>
+        <a href="#" style="color: #ff9933; text-decoration: none;">Privacy</a>
+        <a href="#" style="color: #ff9933; text-decoration: none;">Terms</a>
+        <a href="#" style="color: #ff9933; text-decoration: none;">Contact</a>
     </div>
-    <p>© 2024 Gjam Technologies. All rights reserved.</p>
+    <div style="margin: 1rem 0;">
+        <span style="margin: 0 1rem;">
+            <a href="https://fb.com/japangor" style="color: #ff9933; text-decoration: none;">
+                <i class="fab fa-facebook"></i>
+            </a>
+        </span>
+        <span style="margin: 0 1rem;">
+            <a href="https://x.com/japangor" style="color: #ff9933; text-decoration: none;">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </span>
+        <span style="margin: 0 1rem;">
+            <a href="https://instagram.com/japangor" style="color: #ff9933; text-decoration: none;">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </span>
+        <span style="margin: 0 1rem;">
+            <a href="#" style="color: #ff9933; text-decoration: none;">
+                <i class="fab fa-linkedin"></i>
+            </a>
+        </span>
+    </div>
+    <p>🕉️ Gjam Technologies | Divine Wisdom Through Technology</p>
+    <p style="font-size: 0.8rem; color: rgba(255,255,255,0.6);">© 2024 All rights reserved.</p>
 </div>
 """, unsafe_allow_html=True)
+
+# Add Font Awesome for icons
+st.markdown("""
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+""", unsafe_allow_html=True)
+
+# Handle session state cleanup
+if st.button("Reset Session", key="reset_session"):
+    for key in st.session_state.keys():
+        del st.session_state[key]
+    st.rerun()
