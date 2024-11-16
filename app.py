@@ -9,6 +9,8 @@ import requests
 from openai import OpenAI
 import stripe
 import webbrowser
+import random  # Import the random module
+
 # Constants
 
 OPENAI_API_KEY = None
