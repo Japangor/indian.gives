@@ -44,9 +44,11 @@ secrets = get_secrets()
 def init_db():
     conn = sqlite3.connect('gita_users.db', check_same_thread=False)
     c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS user_sessions
+  c.execute('''CREATE TABLE IF NOT EXISTS user_sessions
                  (session_id TEXT PRIMARY KEY, 
                   trials_used INTEGER DEFAULT 0,
+                  email TEXT NULL,
+                  created_at TEXT)''')
                 
     conn.commit()
     conn.close()
