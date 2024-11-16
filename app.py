@@ -11,16 +11,43 @@ import requests
 OPENAI_API_KEY = "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"
 EMAILOCTOPUS_API_KEY = "eo_46714b6ebb21e01fe89894213c14202429a9dcfd710ed95a4c51ef24e011caf1"
 EMAILOCTOPUS_LIST_ID = "eddc64ac-0e61-11ef-84db-09f6f"
+def get_secrets():
+    # Try to get from Streamlit secrets first, then environment variables
+    secrets = {
+        "OPENAI_API_KEY": st.secrets.get("OPENAI_API_KEY", os.getenv("OPENAI_API_KEY")),
+        "EMAILOCTOPUS_API_KEY": st.secrets.get("EMAILOCTOPUS_API_KEY", os.getenv("EMAILOCTOPUS_API_KEY")),
+        "EMAILOCTOPUS_LIST_ID": st.secrets.get("EMAILOCTOPUS_LIST_ID", os.getenv("EMAILOCTOPUS_LIST_ID"))
+    }
+    
+    # Validate required secrets
+    missing_secrets = [k for k, v in secrets.items() if not v]
+    if missing_secrets:
+        st.error(f"Missing required secrets: {', '.join(missing_secrets)}")
+        st.info("""
+        Please set the required secrets either in your Streamlit secrets.toml file or as environment variables.
+        
+        In `.streamlit/secrets.toml`:
+        ```toml
+        OPENAI_API_KEY = "your-openai-key"
+        EMAILOCTOPUS_API_KEY = "your-emailoctopus-key"
+        EMAILOCTOPUS_LIST_ID = "your-list-id"
+        ```
+        """)
+        st.stop()
+    
+    return secrets
 
-# Initialize SQLite database for email tracking
+# Get secrets
+secrets = get_secrets()
+
+# Initialize database for email tracking
 def init_db():
     conn = sqlite3.connect('gita_users.db', check_same_thread=False)
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS user_sessions
                  (session_id TEXT PRIMARY KEY, 
                   trials_used INTEGER DEFAULT 0,
-                  email TEXT NULL,
-                  created_at TEXT)''')
+                
     conn.commit()
     conn.close()
 
