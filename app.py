@@ -94,51 +94,52 @@ def find_matching_verses(question: str, top_k: int = 3) -> List[Dict]:
 # Function to generate response using OpenAI API
 def generate_response(question: str, verses: List[Dict]) -> str:
     try:
-        openai.api_key = secrets["OPENAI_API_KEY"]
+        from openai import OpenAI
+        
+        client = OpenAI(api_key=secrets["OPENAI_API_KEY"])
+        
         verses_context = "\n\n".join([
             f"Chapter {v['chapter']}, Verse {v['verse']}:\n{v['text']}"
             for v in verses
         ])
-        prompt = f"""You are Krishna providing divine guidance based on the Bhagavad Gita.
+        
+        messages = [
+            {"role": "system", "content": """You are Krishna providing divine guidance based on the Bhagavad Gita.
+             Your responses should be compassionate, wise, and practical."""},
+            {"role": "user", "content": f"""Question: {question}
+            
+            Relevant verses from the Gita:
+            {verses_context}
+            
+            Please provide guidance in this format:
+            1. Divine Answer: {question}
+            [Provide a direct, compassionate answer from Krishna's perspective]
 
-Question: {question}
+            2. Wisdom from Verses:
+            [Explain how the relevant verses apply to the question]
 
-Relevant verses from the Gita:
-{verses_context}
+            3. Practical Guidance:
+            [Provide specific steps or practices to implement the wisdom]
 
-Please provide a response structured as follows:
+            4. Sanskrit Wisdom:
+            [Include a relevant Sanskrit shloka with its meaning]
 
-1. Divine Answer: {question}
-[Provide a direct, compassionate answer from Krishna's perspective]
+            5. Blessing:
+            [Conclude with words of encouragement and blessing]"""}
+        ]
 
-2. Wisdom from Verses:
-[Explain how the relevant verses apply to the question]
-
-3. Practical Guidance:
-[Provide specific steps or practices to implement the wisdom]
-
-4. Sanskrit Wisdom:
-[Include a relevant Sanskrit shloka with its meaning]
-
-5. Blessing:
-[Conclude with words of encouragement and blessing]
-
-Make the response personal, inspiring, and filled with divine wisdom."""
-
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=[{"role": "user", "content": prompt}],
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=messages,
             max_tokens=1000,
-            n=1,
             temperature=0.7,
         )
         
-        return response.choices[0].message['content'].strip()
+        return response.choices[0].message.content.strip()
 
     except Exception as e:
         st.error(f"Error generating response: {str(e)}")
         return "🙏 I apologize, but I am unable to provide guidance at this moment. Please try again."
-
 # EmailOctopus integration for email capture
 def subscribe_email(email: str):
     url = f"https://emailoctopus.com/api/1.6/lists/{EMAILOCTOPUS_LIST_ID}/contacts"
