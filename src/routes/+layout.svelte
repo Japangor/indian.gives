@@ -22,27 +22,27 @@
   const socialLinks = [
     {
       name: 'LinkedIn',
-      url: 'https://linkedin.com/company/gjam-technologies',
+      url: 'https://linkedin.com/company/gjam',
       icon: Linkedin
     },
     {
       name: 'Twitter',
-      url: 'https://twitter.com/gjamtech',
+      url: 'https://twitter.com/japangor',
       icon: Twitter
     },
     {
       name: 'GitHub',
-      url: 'https://github.com/gjamtech',
+      url: 'https://github.com/japangor',
       icon: Github
     },
     {
       name: 'Instagram',
-      url: 'https://instagram.com/gjamtech',
+      url: 'https://instagram.com/japangor',
       icon: Instagram
     },
     {
       name: 'Facebook',
-      url: 'https://facebook.com/gjamtechnologies',
+      url: 'https://facebook.com/gjam13',
       icon: Facebook
     }
   ];
