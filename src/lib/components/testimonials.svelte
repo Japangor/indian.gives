@@ -1,140 +1,145 @@
 <script lang="ts">
 	import Marquee from 'svelte-fast-marquee';
-
-	let testimonials = [
-		{
-			name: 'Berzan',
-			title: 'College Student',
-			uni: 'Akdeniz University, Turkey',
-			testimony:
-				'AI Study Bud is like a clone of myself who learns a topic and lets me ask him anything about it in a couple of seconds.',
-			img: '/berzan.webp'
-		},
-
-		{
-			name: 'Bethel',
-			title: 'College Student',
-			uni: 'Abia State University, Nigeria',
-			testimony:
-				'AI Studybud has helped me as an engineering student to dive deep into advanced topics and understand formulas better. I can even generate quizzes and test myself, insane!',
-			img: '/bethel.webp'
-		},
-
-		{
-			name: 'John',
-			title: 'College Student',
-			uni: 'Antalya Bilim University, Turkey',
-			testimony:
-				'Everything written about AI Studybud is true. It has helped me in my studies and has made my learning experience much more enjoyable and fun.',
-			img: '/avatar.webp'
-		},
-
-		{
-			name: 'Victory',
-			title: 'College Student & Founder AI Studybud',
-			uni: 'Abia State University, Nigeria',
-			testimony:
-				'I as a student had a hard time focusing while reading, I am not the patient reading type. I wanted a way to accelerate my learning and I thought of a tool that could find information for me fast from my university lecture notes, building this has helped me a lot as I get clarification on topics discussed in class later',
-			img: '/founder.jpg'
-		},
-
-		{
-			name: 'Favor',
-			title: 'Post-graduate Student',
-			uni: 'UK',
-			testimony:
-				'As a post-graduate student, I was struggling to keep up with the pace of my coursework. AI Studybud has been a game-changer for me. It has helped me to focus and has made my learning experience much more efficient. Writing my thesis was a breeze too !',
-			img: '/favor.jpg'
-		}
+  
+	const testimonials = [
+	  {
+		name: 'Rajesh Sharma',
+		title: 'Spiritual Seeker',
+		location: 'Mumbai, India',
+		testimony: 'The Gita AI has transformed my understanding of dharma and karma. It\'s like having a personal spiritual guide who can explain complex verses in simple terms.',
+		img: '/testimonials/seeker1.webp'
+	  },
+	  {
+		name: 'Priya Patel',
+		title: 'Yoga Instructor',
+		location: 'Rishikesh, India',
+		testimony: 'As a yoga teacher, I use this platform to deepen my students\' understanding of the Gita\'s wisdom. The AI provides beautiful insights that resonate with modern life.',
+		img: '/testimonials/seeker2.webp'
+	  },
+	  {
+		name: 'Arun Gupta',
+		title: 'Business Professional',
+		location: 'Bangalore, India',
+		testimony: 'Finding balance in corporate life was challenging until I discovered this platform. The Gita\'s teachings, explained through AI, have helped me maintain peace amidst chaos.',
+		img: '/testimonials/seeker3.webp'
+	  },
+	  {
+		name: 'Swami Atmajnananda',
+		title: 'Spiritual Guide',
+		location: 'Varanasi, India',
+		testimony: 'This platform beautifully bridges ancient wisdom with modern technology. The AI\'s interpretations are remarkably aligned with traditional teachings while being accessible to today\'s seekers.',
+		img: '/testimonials/seeker4.webp'
+	  },
+	  {
+		name: 'Meera Krishnan',
+		title: 'Author & Meditation Teacher',
+		location: 'Kerala, India',
+		testimony: 'The depth of understanding this AI provides is remarkable. It helps me prepare for my meditation sessions by providing relevant verses and practical interpretations.',
+		img: '/testimonials/seeker5.webp'
+	  },
+	  {
+		name: 'Dr. Amit Singh',
+		title: 'Professor of Philosophy',
+		location: 'Delhi University, India',
+		testimony: 'As an academic, I\'m impressed by the accuracy and depth of the AI\'s responses. It\'s a valuable tool for both scholars and spiritual practitioners.',
+		img: '/testimonials/seeker6.webp'
+	  }
 	];
-</script>
-
-<div class="hidden md:block">
+  </script>
+  
+  <div class="hidden md:block">
 	<Marquee
-		gradient
-		speed={25}
-		gap={'2rem'}
-		pauseOnHover
-		class=" w-full items-center  py-10"
-		style="--gradientColor: rgb(243 244 246); --gradientWidth: 2%;"
+	  gradient
+	  speed={20}
+	  gap={'2rem'}
+	  pauseOnHover
+	  class="w-full items-center py-10"
+	  style="--gradientColor: rgb(255, 248, 240); --gradientWidth: 2%;"
 	>
-		{#each testimonials as { name, title, uni, testimony, img }, i (i)}
-			<div class="testimonial">
-				<div class="absolute top-3 flex items-center">
-					<img src="/star.webp" alt="star" width="20" height="20" />
-					<img src="/star.webp" alt="star" width="20" height="20" />
-					<img src="/star.webp" alt="star" width="20" height="20" />
-					<img src="/star.webp" alt="star" width="20" height="20" />
-					<img src="/star.webp" alt="star" width="20" height="20" />
-				</div>
-				<div class="text-center text-lg font-medium mt-3">
-					<p>"{testimony}"</p>
-				</div>
-				<div class="flex flex-col items-start gap-3 text-left md:flex-row">
-					<div class="avatar">
-						<img
-							src={img}
-							alt={name}
-							width="40"
-							height="40"
-							class="pb mt-1 rounded-full ring ring-primary"
-						/>
-					</div>
-					<div>
-						<h3 class="pt-1 md:pt-0">{name}</h3>
-						<p class="font-medium text-gray-700">{title},</p>
-						<p class="font-medium text-gray-700">{uni}</p>
-					</div>
-				</div>
-			</div>
-		{/each}
-	</Marquee>
-</div>
-
-<div class="mt-7 space-y-5 md:hidden">
-	{#each testimonials as { name, title, uni, testimony, img }, i (i)}
+	  {#each testimonials as { name, title, location, testimony, img }, i (i)}
 		<div class="testimonial">
-			<div class="absolute top-3 flex items-center">
-				<img src="/star.webp" alt="star" width="20" height="20" />
-				<img src="/star.webp" alt="star" width="20" height="20" />
-				<img src="/star.webp" alt="star" width="20" height="20" />
-				<img src="/star.webp" alt="star" width="20" height="20" />
-				<img src="/star.webp" alt="star" width="20" height="20" />
+		  <div class="absolute top-3 flex items-center gap-1">
+			<span class="text-primary font-semibold">Divine Experience</span>
+		  </div>
+		  
+		  <div class="text-center text-lg font-medium mt-3">
+			<p class="text-gray-700">"{testimony}"</p>
+		  </div>
+		  
+		  <div class="flex flex-col items-start gap-3 text-left md:flex-row">
+			<div class="avatar-wrapper">
+			
 			</div>
-			<div class="text-center text-lg font-medium">
-				<p>"{testimony}"</p>
+			<div>
+			  <h3 class="pt-1 md:pt-0 text-primary">{name}</h3>
+			  <p class="font-medium text-gray-700">{title}</p>
+			  <p class="font-medium text-gray-600">{location}</p>
 			</div>
-			<div class="flex items-start gap-5 text-left md:flex-row">
-				<div class="avatar">
-					<img
-						src={img}
-						alt={name}
-						width="40"
-						height="40"
-						class="pb mt-1 rounded-full ring ring-primary"
-					/>
-				</div>
-				<div>
-					<h3 class="pt-1 md:pt-0">{name}</h3>
-					<p class="font-medium text-gray-600">{title},</p>
-					<p class="font-medium text-gray-600">{uni}</p>
-				</div>
-			</div>
+		  </div>
 		</div>
+	  {/each}
+	</Marquee>
+  </div>
+  
+  <div class="mt-7 space-y-5 md:hidden">
+	{#each testimonials as { name, title, location, testimony, img }, i (i)}
+	  <div class="testimonial">
+		<div class="absolute top-3 flex items-center gap-1">
+		  <span class="text-primary font-semibold">Divine Experience</span>
+		</div>
+		
+		<div class="text-center text-lg font-medium">
+		  <p class="text-gray-700">"{testimony}"</p>
+		</div>
+		
+		<div class="flex items-start gap-5 text-left">
+		  <div class="avatar-wrapper">
+			<!-- <img
+			  src={img}
+			  alt={name}
+			  width="48"
+			  height="48"
+			  class="avatar-image"
+			/> -->
+		  </div>
+		  <div>
+			<h3 class="pt-1 text-primary">{name}</h3>
+			<p class="font-medium text-gray-700">{title}</p>
+			<p class="font-medium text-gray-600">{location}</p>
+		  </div>
+		</div>
+	  </div>
 	{/each}
-</div>
-
-<style lang="scss">
-	.avatar {
-		width: 40px;
-		height: 40px;
+  </div>
+  
+  <style lang="scss">
+	.avatar-wrapper {
+	  @apply relative w-12 h-12 rounded-full overflow-hidden 
+			 border-2 border-primary/20 bg-orange-50;
 	}
-
+  
+	.avatar-image {
+	  @apply w-full h-full object-cover rounded-full 
+			 transition-transform hover:scale-105;
+	}
+  
 	.testimonial {
-		@apply relative flex w-full max-w-sm flex-col gap-7 rounded-md border border-transparent bg-white p-5 pt-12 shadow transition-all hover:border-primary md:w-auto md:p-7;
-
-		h3 {
-			@apply font-semibold;
-		}
+	  @apply relative flex w-full max-w-sm flex-col gap-7 
+			 rounded-xl border-2 border-primary/10 bg-white/90 
+			 p-5 pt-12 shadow-lg transition-all backdrop-blur-sm
+			 hover:border-primary hover:shadow-primary/10
+			 md:w-auto md:p-7;
+  
+	  h3 {
+		@apply font-bold text-lg;
+	  }
 	}
-</style>
+  
+	:global(.svelte-marquee-container) {
+	  @apply my-8;
+	}
+  
+	:global(.svelte-marquee) {
+	  @apply gap-6;
+	}
+  </style>

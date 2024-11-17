@@ -1,22 +1,29 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-const EMAIL_OCTOPUS_API_KEY = 'eo_48f844a57dafaabdeb48b805a14242c261df800f63a7643e4940bbd99441cf73';
-const EMAIL_OCTOPUS_LIST_ID = 'eddc64ac-0e61-11ef-84db-09f6f';
+const API_KEY = 'eo_46714b6ebb21e01fe89894213c14202429a9dcfd710ed95a4c51ef24e011caf1';
+const LIST_ID = 'eddc64ac-0e61-11ef-84db-09f6f';
 
 export const POST = (async ({ request }) => {
     try {
         const { email } = await request.json();
 
+        // Input validation
+        if (!email || !email.includes('@')) {
+            return json({ 
+                error: 'Please provide a valid email address' 
+            }, { status: 400 });
+        }
+
         const response = await fetch(
-            `https://emailoctopus.com/api/1.6/lists/${EMAIL_OCTOPUS_LIST_ID}/contacts`,
+            `https://emailoctopus.com/api/1.6/lists/${LIST_ID}/contacts`,
             {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    api_key: EMAIL_OCTOPUS_API_KEY,
+                    api_key: API_KEY,
                     email_address: email,
                     status: 'SUBSCRIBED',
                     fields: {
@@ -30,19 +37,17 @@ export const POST = (async ({ request }) => {
         const data = await response.json();
 
         if (!response.ok) {
-            // Handle specific EmailOctopus error codes
-            const errorCode = data.error?.code;
-            let errorMessage = data.error?.message || 'Subscription failed';
-
-            switch (errorCode) {
+            let errorMessage = 'Subscription failed';
+            
+            switch (data.error?.code) {
                 case 'MEMBER_EXISTS_WITH_EMAIL_ADDRESS':
-                    errorMessage = 'You are already subscribed! 🙏';
+                    errorMessage = 'You are already part of our divine community! 🙏';
                     break;
                 case 'INVALID_EMAIL_ADDRESS':
-                    errorMessage = 'Please enter a valid email address';
+                    errorMessage = 'Please provide a valid email address';
                     break;
                 case 'EMAIL_ADDRESS_BLOCKED':
-                    errorMessage = 'This email address cannot be subscribed';
+                    errorMessage = 'This email cannot be subscribed';
                     break;
             }
 
@@ -53,7 +58,7 @@ export const POST = (async ({ request }) => {
     } catch (error) {
         console.error('Subscription error:', error);
         return json(
-            { error: 'Failed to process subscription' },
+            { error: 'Failed to process subscription. Please try again.' },
             { status: 500 }
         );
     }

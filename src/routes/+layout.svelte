@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
-	import { Menu, X } from 'lucide-svelte';
+	import { Facebook, Github, Instagram, Linkedin, Mail, Menu, Twitter, X } from 'lucide-svelte';
 	import '../app.css';
   
 	// SEO Configuration
@@ -17,7 +17,36 @@
 	  'Gita AI',
 	  // ... your other keywords
 	];
+    const currentYear = new Date().getFullYear();
   
+  const socialLinks = [
+    {
+      name: 'LinkedIn',
+      url: 'https://linkedin.com/company/gjam-technologies',
+      icon: Linkedin
+    },
+    {
+      name: 'Twitter',
+      url: 'https://twitter.com/gjamtech',
+      icon: Twitter
+    },
+    {
+      name: 'GitHub',
+      url: 'https://github.com/gjamtech',
+      icon: Github
+    },
+    {
+      name: 'Instagram',
+      url: 'https://instagram.com/gjamtech',
+      icon: Instagram
+    },
+    {
+      name: 'Facebook',
+      url: 'https://facebook.com/gjamtechnologies',
+      icon: Facebook
+    }
+  ];
+
 	// State management
 	let animate = false;
 	let isMenuOpen = false;
@@ -298,43 +327,137 @@
 	{/if}
   
 	<!-- Footer -->
-	<footer class="bg-gray-50 py-12">
-	  <div class="container mx-auto px-4">
-		<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-		  <!-- Logo and Description -->
-		  <div class="col-span-1 md:col-span-2">
-			<a href="/">
-			  <img src="/main-logo.png" alt="logo" class="w-[200px] mb-4" />
-			</a>
-			<p class="text-gray-600">
-			  Experience divine guidance through AI-powered spiritual wisdom from the Bhagavad Gita.
-			</p>
-		  </div>
-  
-		  <!-- Quick Links -->
-		  <div>
-			<h4 class="font-bold mb-4">Quick Links</h4>
-			<div class="flex flex-col gap-2">
-			  <a href="#whyUs" class="footer-link">Why Us</a>
-			  <a href="#demo" class="footer-link">Try Demo</a>
-			  <a href="#faqs" class="footer-link">FAQs</a>
+	<script lang="ts">
+		import { 
+		  Github, 
+		  Linkedin, 
+		  Twitter, 
+		  Instagram, 
+		  Facebook,
+		  Mail
+		} from 'lucide-svelte';
+	  
+		const currentYear = new Date().getFullYear();
+		
+		const socialLinks = [
+		  {
+			name: 'LinkedIn',
+			url: 'https://linkedin.com/company/gjam',
+			icon: Linkedin
+		  },
+		  {
+			name: 'Twitter',
+			url: 'https://twitter.com/japangor',
+			icon: Twitter
+		  },
+		  {
+			name: 'GitHub',
+			url: 'https://github.com/japangor',
+			icon: Github
+		  },
+		  {
+			name: 'Instagram',
+			url: 'https://instagram.com/japangor',
+			icon: Instagram
+		  },
+		  {
+			name: 'Facebook',
+			url: 'https://facebook.com/gjam13',
+			icon: Facebook
+		  }
+		];
+	  </script>
+	  
+	  <footer class="bg-gradient-to-b from-gray-50 to-gray-100 py-16">
+		<div class="container mx-auto px-4">
+		  <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+			<!-- Logo and Description -->
+			<div class="col-span-1 md:col-span-4">
+			  <a href="/">
+				<img src="/main-logo.png" alt="logo" class="w-[200px] mb-4" />
+			  </a>
+			  <p class="text-gray-600 mb-4">
+				Experience divine guidance through AI-powered spiritual wisdom from the Bhagavad Gita.
+			  </p>
+			  <!-- Social Links -->
+			  <div class="flex items-center gap-4 mb-6">
+				{#each socialLinks as { name, url, icon: Icon }}
+				  <a
+					href={url}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="text-gray-600 hover:text-primary transition-colors"
+					aria-label={name}
+				  >
+					<Icon size={20} />
+				  </a>
+				{/each}
+			  </div>
+			</div>
+	  
+			<!-- Quick Links -->
+			<div class="col-span-1 md:col-span-2">
+			  <h4 class="font-bold mb-4 text-gray-800">Quick Links</h4>
+			  <div class="flex flex-col gap-2">
+				<a href="#whyUs" class="footer-link">Why Us</a>
+				<a href="#demo" class="footer-link">Try Demo</a>
+				<a href="#faqs" class="footer-link">FAQs</a>
+			  </div>
+			</div>
+	  
+			<!-- Legal -->
+			<div class="col-span-1 md:col-span-2">
+			  <h4 class="font-bold mb-4 text-gray-800">Legal</h4>
+			  <div class="flex flex-col gap-2">
+				<a href="/privacy" class="footer-link">Privacy Policy</a>
+				<a href="/terms" class="footer-link">Terms of Service</a>
+			  </div>
+			</div>
+	  
+			<!-- Gjam Technologies -->
+			<div class="col-span-1 md:col-span-4">
+			  <h4 class="font-bold mb-4 text-gray-800">About Gjam Technologies</h4>
+			  <p class="text-gray-600 mb-4">
+				A pioneering Indian software company specializing in AI solutions, bringing ancient wisdom to modern technology.
+			  </p>
+			  <div class="space-y-2">
+				<a 
+				  href="https://gjam.in" 
+				  target="_blank" 
+				  rel="noopener noreferrer"
+				  class="text-primary hover:text-primary-dark transition-colors font-medium"
+				>
+				  Visit Gjam Technologies →
+				</a>
+				<div class="flex items-center gap-2 text-gray-600">
+				  <Mail size={16} />
+				  <a href="mailto:contact@gjam.in" class="hover:text-primary transition-colors">
+					help@gjam.in
+				  </a>
+				</div>
+			  </div>
 			</div>
 		  </div>
-  
-		  <!-- Legal -->
-		  <div>
-			<h4 class="font-bold mb-4">Legal</h4>
-			<div class="flex flex-col gap-2">
-			  <a href="/privacy" class="footer-link">Privacy Policy</a>
-			  <a href="/terms" class="footer-link">Terms of Service</a>
+	  
+		  <!-- Divider -->
+		  <div class="border-t border-gray-200 my-8"></div>
+	  
+		  <!-- Bottom Bar -->
+		  <div class="flex flex-col md:flex-row items-center justify-between text-gray-600 text-sm">
+			<p>© {currentYear} INDIAN.GIVES. All rights reserved.</p>
+			<div class="mt-4 md:mt-0">
+			  <p>
+				Built with 💝 by <a
+				  href="https://gjam.in"
+				  target="_blank"
+				  rel="noopener noreferrer"
+				  class="text-primary hover:text-primary-dark transition-colors"
+				>Gjam Technologies</a> 
+			  </p>
 			</div>
 		  </div>
 		</div>
-  
-		<!-- Bottom Bar -->
-		<div class="border-t border-gray-200 mt-8 pt-8 text-center text-gray-600">
-		  <p>© {new Date().getFullYear()} INDIAN.GIVES. All rights reserved.</p>
-		</div>
-	  </div>
-	</footer>
+	  </footer>
+	  
+	 
   </div>

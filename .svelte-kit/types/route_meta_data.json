@@ -1,0 +1,14 @@
+{
+	"/": [],
+	"/api/generate": [
+		"src/routes/api/generate/+server.ts"
+	],
+	"/api/subscribe": [
+		"src/routes/api/subscribe/+server.ts"
+	],
+	"/api/verses": [
+		"src/routes/api/verses/+server.ts"
+	],
+	"/privacy": [],
+	"/terms": []
+}
