@@ -10,13 +10,156 @@
 	import Faqs from '$lib/components/faqs.svelte';
 	import { onMount } from 'svelte';
 	import type { Verse, VerseMatch, AIResponse, Message } from '$lib/types';
-	const suggestions = [
+	const defaultSuggestions = {
+  spiritual: [
     "How can I find inner peace? 🧘",
     "What is my life's purpose? 🎯",
     "How to overcome fear? 💪",
     "Guide me about Karma Yoga 🔄",
     "How to maintain life balance? ⚖️"
-  ];
+  ],
+  philosophical: [
+    "What happens after death? 🌟",
+    "Why do we suffer? 🤔",
+    "How to find true happiness? 😊",
+    "What is the meaning of dharma? ☸️",
+    "How to develop devotion? 🙏"
+  ],
+  practical: [
+    "How to handle stress? 😌",
+    "Guide me in decision making 📝",
+    "How to control anger? 😤",
+    "Ways to improve focus 🎯",
+    "Dealing with relationships 💝"
+  ]
+};
+function getDynamicSuggestions(input: string): string[] {
+  if (!input.trim()) {
+    // Default diverse suggestions for empty input
+    return [
+      "How can I find inner peace? 🧘‍♂️",
+      "What is the purpose of karma? ⚡",
+      "Guide me in difficult decisions 🤔",
+      "Understanding divine love 💝"
+    ];
+  }
+
+  const inputLower = input.toLowerCase();
+  const words = inputLower.split(' ').filter(word => word.length > 2);
+
+  // Different perspectives for suggestions
+  const perspectiveTemplates = {
+    practical: {
+      keywords: ['how', 'way', 'method', 'practice', 'do', 'can', 'help'],
+      templates: [
+        (topic) => `What steps can I take to master ${topic}? 🎯`,
+        (topic) => `Practical ways to apply ${topic} in daily life 📝`,
+        (topic) => `How to develop discipline in ${topic}? 💪`,
+        (topic) => `Simple practices for ${topic} 🌟`
+      ]
+    },
+    philosophical: {
+      keywords: ['why', 'what', 'meaning', 'purpose', 'understand'],
+      templates: [
+        (topic) => `What is the deeper meaning of ${topic}? 🤔`,
+        (topic) => `How does ${topic} relate to dharma? ☸️`,
+        (topic) => `Understanding the essence of ${topic} 📚`,
+        (topic) => `Why do we experience ${topic}? 🌌`
+      ]
+    },
+    spiritual: {
+      keywords: ['divine', 'god', 'krishna', 'soul', 'spirit', 'peace'],
+      templates: [
+        (topic) => `How does Krishna's wisdom illuminate ${topic}? 🕉️`,
+        (topic) => `The spiritual significance of ${topic} ✨`,
+        (topic) => `Divine perspective on ${topic} 🙏`,
+        (topic) => `Connecting ${topic} with higher consciousness 🌟`
+      ]
+    },
+    transformational: {
+      keywords: ['change', 'transform', 'overcome', 'improve', 'better'],
+      templates: [
+        (topic) => `How can I transcend limitations in ${topic}? ⚡`,
+        (topic) => `Transform ${topic} through Gita's wisdom 🦋`,
+        (topic) => `Breaking free from ${topic} barriers 🚀`,
+        (topic) => `Evolution of consciousness through ${topic} 🌱`
+      ]
+    }
+  };
+
+  function generateDiverseSuggestions(input: string): string[] {
+    const cleanInput = input.replace(/[?.,!]/g, '').trim();
+    const suggestions: string[] = [];
+    
+    // Get one suggestion from each perspective type
+    Object.entries(perspectiveTemplates).forEach(([_, perspective]) => {
+      const template = perspective.templates[Math.floor(Math.random() * perspective.templates.length)];
+      suggestions.push(template(cleanInput));
+    });
+
+    // Add one contextual suggestion based on topic
+    const contextualSuggestions = [
+      `Can Arjuna's journey help with ${cleanInput}? ⚔️`,
+      `What chapter of Gita best addresses ${cleanInput}? 📖`,
+      `How did ancient sages approach ${cleanInput}? 🧘‍♂️`,
+      `Balancing material and spiritual aspects of ${cleanInput} ⚖️`
+    ];
+
+    suggestions.push(contextualSuggestions[Math.floor(Math.random() * contextualSuggestions.length)]);
+
+    // Shuffle and return 4 unique suggestions
+    return [...new Set(suggestions)]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 4);
+  }
+
+  // Identify if the input is a question or statement
+  const isQuestion = inputLower.includes('?') || 
+                    words.some(w => ['how', 'what', 'why', 'when', 'where', 'which'].includes(w));
+
+  // Generate appropriate diverse suggestions
+  if (isQuestion) {
+    // For questions, provide different angles of the same inquiry
+    const questionTopic = input
+      .replace(/^(how|what|why|when|where|which)/i, '')
+      .replace(/\?/g, '')
+      .trim();
+    return generateDiverseSuggestions(questionTopic);
+  }
+
+  // For statements or topics, generate diverse perspectives
+  return generateDiverseSuggestions(input);
+}
+
+// Example usage:
+/* 
+Input: "how to find peace"
+Output might be:
+- "Simple practices for finding peace 🌟"
+- "What is the deeper meaning of peace? 🤔"
+- "Divine perspective on finding peace 🙏"
+- "How did ancient sages approach peace? 🧘‍♂️"
+
+Input: "relationship problems"
+Output might be:
+- "Practical ways to apply wisdom in daily life 📝"
+- "Understanding the essence of relationships 📚"
+- "Transform relationships through Gita's wisdom 🦋"
+- "What chapter of Gita best addresses relationship problems? 📖"
+*/
+
+// Add to your existing code
+let suggestions: string[] = getDynamicSuggestions('');
+
+// Update suggestions when question changes
+$: {
+  if (question) {
+    suggestions = getDynamicSuggestions(question);
+  } else {
+    suggestions = getDynamicSuggestions('');
+  }
+}
+
 
 	const whyUs = [
     {
@@ -371,12 +514,12 @@ async function generateResponse(query: string, matchedVerses: VerseMatch[]): Pro
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
 		  <!-- svelte-ignore missing-declaration -->
 		  {#each suggestions as suggestion}
-			<button
-			  on:click={() => handleSuggestion(suggestion)}
-			  class="text-left p-3 rounded-lg border border-primary/20 hover:bg-primary/10 transition-colors"
-			>
-			  {suggestion}
-			</button>
+		  <button
+		  on:click={() => handleSuggestion(suggestion)}
+		  class="text-left p-3 rounded-lg border border-primary/20 hover:bg-primary/10 transition-colors"
+		>
+		  {suggestion}
+		</button>
 		  {/each}
 		</div>
   
