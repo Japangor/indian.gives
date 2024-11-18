@@ -1,13 +1,13 @@
 <svelte:head>
-	<title>Terms of Service - AI Studybud</title>
+	<title>Terms of Service - INDIAN.GIVES</title>
 </svelte:head>
 
 <section class="pb-5 pt-36">
-	<h1 id="ai-studybud-terms-and-conditions">AI Studybud Terms and Conditions</h1>
+	<h1 id="ai-studybud-terms-and-conditions">INDIAN.GIVES Terms and Conditions</h1>
 	<p><strong>Effective Date</strong>: September 09 2023</p>
 	<p>
-		These Terms and Conditions (&quot;Terms&quot;) govern your use of the AI Studybud service
-		(&quot;Service&quot;) provided by AI Studybud (&quot;Company&quot;). By accessing or using the
+		These Terms and Conditions (&quot;Terms&quot;) govern your use of the INDIAN.GIVES service
+		(&quot;Service&quot;) provided by INDIAN.GIVES (&quot;Company&quot;). By accessing or using the
 		Service, you agree to be bound by these Terms. If you do not agree to these Terms, please do not
 		use the Service.
 	</p>
