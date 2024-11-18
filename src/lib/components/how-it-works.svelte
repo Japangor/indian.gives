@@ -52,14 +52,112 @@
 
             <!-- Step 2: Choose Topics -->
             <div class="topics ctn" in:fly={{ x: -50, duration: 1000, delay: 800 }}>
-                <div class="left topic-grid assetCtn">
-                    {#each ['Dharma', 'Karma', 'Meditation', 'Purpose', 'Peace', 'Devotion'] as topic}
-                        <div class="topic-card">
-                            <LucideTorus class="h-5 w-5 text-primary" />
-                            <span>{topic}</span>
+                <div class="container mx-auto px-4 py-12">
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-6">
+                      <!-- Dharma -->
+                      <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group cursor-pointer">
+                        <div class="flex flex-col items-center space-y-4">
+                          <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          </div>
+                          <div class="text-center">
+                            <h3 class="font-bold text-gray-900">Dharma</h3>
+                            <p class="text-sm text-gray-600 mt-1">Righteous Living & Duty</p>
+                          </div>
                         </div>
-                    {/each}
-                </div>
+                      </div>
+                  
+                      <!-- Karma -->
+                      <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group cursor-pointer">
+                        <div class="flex flex-col items-center space-y-4">
+                          <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                          </div>
+                          <div class="text-center">
+                            <h3 class="font-bold text-gray-900">Karma</h3>
+                            <p class="text-sm text-gray-600 mt-1">Action & Consequences</p>
+                          </div>
+                        </div>
+                      </div>
+                  
+                      <!-- Meditation -->
+                      <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group cursor-pointer">
+                        <div class="flex flex-col items-center space-y-4">
+                          <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                          </div>
+                          <div class="text-center">
+                            <h3 class="font-bold text-gray-900">Meditation</h3>
+                            <p class="text-sm text-gray-600 mt-1">Inner Peace & Focus</p>
+                          </div>
+                        </div>
+                      </div>
+                  
+                      <!-- Purpose -->
+                      <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group cursor-pointer">
+                        <div class="flex flex-col items-center space-y-4">
+                          <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                          </div>
+                          <div class="text-center">
+                            <h3 class="font-bold text-gray-900">Purpose</h3>
+                            <p class="text-sm text-gray-600 mt-1">Life's Direction & Goals</p>
+                          </div>
+                        </div>
+                      </div>
+                  
+                      <!-- Peace -->
+                      <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group cursor-pointer">
+                        <div class="flex flex-col items-center space-y-4">
+                          <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                            </svg>
+                          </div>
+                          <div class="text-center">
+                            <h3 class="font-bold text-gray-900">Peace</h3>
+                            <p class="text-sm text-gray-600 mt-1">Mental & Emotional Balance</p>
+                          </div>
+                        </div>
+                      </div>
+                  
+                      <!-- Devotion -->
+                      <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group cursor-pointer">
+                        <div class="flex flex-col items-center space-y-4">
+                          <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                          </div>
+                          <div class="text-center">
+                            <h3 class="font-bold text-gray-900">Devotion</h3>
+                            <p class="text-sm text-gray-600 mt-1">Divine Love & Service</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <style>
+                    /* Optional: Add custom animations for hover effects */
+                    .group:hover {
+                      transform: translateY(-2px);
+                    }
+                    
+                    /* Ensure primary color is defined */
+                    :root {
+                      --primary-color: #7c3aed;
+                      --primary-rgb: 124, 58, 237;
+                    }
+                  </style>
 
                 <div class="right stepCtn" in:fly={{ x: 50, duration: 1000, delay: 900 }}>
                     <span class="step">

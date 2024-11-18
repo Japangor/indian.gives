@@ -425,13 +425,88 @@ async function generateResponse(query: string, matchedVerses: VerseMatch[]): Pro
 	  </div>
 	</div>
   </section>
-<!-- <section id="howItWorks" class="min-h-screen py-16 md:min-h-[75vh]">
+<section id="howItWorks" class="min-h-screen py-16 md:min-h-[75vh]">
 	<h2>How it works</h2>
 	<p class="text-center">Using AI Studybud is very simple.</p>
 
 	<HowItWorks />
-</section> -->
-
+</section>
+<section id="subscribe" class="min-h-screen py-16 md:min-h-[75vh] bg-gradient-to-b from-white to-gray-50">
+	<div class="container mx-auto px-4">
+	  <div class="max-w-4xl mx-auto text-center mb-12">
+		<h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+		  🕉️ Embrace Divine Wisdom Daily
+		</h2>
+		<p class="text-lg text-gray-600 mb-8">
+		  Join our spiritual journey to discover timeless teachings of the Bhagavad Gita, 
+		  delivered through modern AI technology. Receive personalized guidance, verses, 
+		  and practical wisdom for your daily life.
+		</p>
+	  </div>
+  
+	  <div class="max-w-xl mx-auto bg-white rounded-2xl shadow-xl p-8 md:p-10">
+		<div class="grid md:grid-cols-2 gap-8 mb-8">
+		  <div class="flex items-start space-x-3">
+			<div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+			  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+			  </svg>
+			</div>
+			<div>
+			  <h3 class="font-semibold text-gray-900 mb-1">Daily Wisdom</h3>
+			  <p class="text-gray-600 text-sm">Curated verses and interpretations from the Bhagavad Gita</p>
+			</div>
+		  </div>
+  
+		  <div class="flex items-start space-x-3">
+			<div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+			  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+			  </svg>
+			</div>
+			<div>
+			  <h3 class="font-semibold text-gray-900 mb-1">Spiritual Insights</h3>
+			  <p class="text-gray-600 text-sm">AI-powered guidance for modern life challenges</p>
+			</div>
+		  </div>
+  
+		  <div class="flex items-start space-x-3">
+			<div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+			  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+			  </svg>
+			</div>
+			<div>
+			  <h3 class="font-semibold text-gray-900 mb-1">Meditation Tips</h3>
+			  <p class="text-gray-600 text-sm">Practical meditation and mindfulness techniques</p>
+			</div>
+		  </div>
+  
+		  <div class="flex items-start space-x-3">
+			<div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+			  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+			  </svg>
+			</div>
+			<div>
+			  <h3 class="font-semibold text-gray-900 mb-1">Community Access</h3>
+			  <p class="text-gray-600 text-sm">Join a community of spiritual seekers</p>
+			</div>
+		  </div>
+		</div>
+  
+		<!-- EmailOctopus Embedded Form -->
+		<div id="email-form-wrapper" class="mt-8">
+		  <script async src="https://eocampaign1.com/form/ed6bb2fa-a571-11ef-b5c9-eda330e5b5ed.js" data-form="ed6bb2fa-a571-11ef-b5c9-eda330e5b5ed"></script>
+		</div>
+  
+		<p class="text-center text-sm text-gray-500 mt-6">
+		  Join 1000+ spiritual seekers receiving divine guidance every week
+		</p>
+	  </div>
+	</div>
+  </section>
+  
 <section id="testimonials" class="min-h-screen bg-gray-100 py-16 md:min-h-[75vh]">
 	<h2>Testimonials</h2>
 	<p class="text-center">Don't just take our word for it...</p>
