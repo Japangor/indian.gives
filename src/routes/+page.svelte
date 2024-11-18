@@ -268,7 +268,7 @@ async function generateResponse(query: string, matchedVerses: VerseMatch[]): Pro
 
 		<div class="flex flex-col sm:flex-row gap-4 mt-6">
 			<a
-				href="https://indian.gives"
+				href="#demo"
 				class="btn primary-btn flex items-center justify-center gap-2 text-center"
 			>
 				<span>Start Your Spiritual Journey</span>
