@@ -756,7 +756,7 @@ export function generateDynamicSuggestions(input: string): string[] {
 			</div>
   
 			{#if response}
-			  <div class="mt-8 space-y-6">
+			  <div class="mt-8 space-y-6" transition:fade>
 				<div class="bg-gradient-to-r from-orange-50 to-purple-50 rounded-lg p-6">
 				  <div class="text-primary text-lg mb-4">॥ श्री कृष्ण उवाच ॥</div>
 				  <div class="prose max-w-none whitespace-pre-line">
@@ -824,7 +824,7 @@ export function generateDynamicSuggestions(input: string): string[] {
 			</button>
   
 			{#if karmaResult}
-			  <div class="mt-6 space-y-6">
+			  <div class="mt-6 space-y-6" transition:fade>
 				<div class="bg-gradient-to-r from-orange-50 to-purple-50 rounded-lg p-6">
 				  <div class="text-center">
 					<div class="text-4xl font-bold text-primary mb-2">
@@ -890,7 +890,7 @@ export function generateDynamicSuggestions(input: string): string[] {
 			</button>
   
 			{#if meditationResult}
-			  <div class="mt-6 space-y-6">
+			  <div class="mt-6 space-y-6" transition:fade>
 				<div class="bg-gradient-to-r from-orange-50 to-purple-50 rounded-lg p-6">
 				  <div class="mb-4">
 					<span class="text-primary font-semibold">Duration:</span> {meditationResult.duration} minutes  
@@ -932,7 +932,7 @@ export function generateDynamicSuggestions(input: string): string[] {
 			</button>
   
 			{#if dailyVerse}
-			  <div class="mt-6 space-y-6">
+			  <div class="mt-6 space-y-6" transition:fade>
 				<div class="bg-gradient-to-r from-orange-50 to-purple-50 rounded-lg p-6">
 				  <div class="text-primary mb-4">
 					Chapter {dailyVerse.verse.chapter}, Verse {dailyVerse.verse.verse}  
@@ -973,7 +973,7 @@ export function generateDynamicSuggestions(input: string): string[] {
   
 		<!-- Error Message -->
 		{#if error}  
-		  <div class="mt-6 p-4 bg-red-50 text-red-600 rounded-lg border border-red-200" in:fade>
+		  <div class="mt-6 p-4 bg-red-50 text-red-600 rounded-lg border border-red-200" transition:fade>
 			{error}
 		  </div>
 		{/if}
@@ -984,77 +984,78 @@ export function generateDynamicSuggestions(input: string): string[] {
 	<div class="container mx-auto px-4">
 	  <div class="max-w-4xl mx-auto text-center mb-12">
 		<h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
-		  🕉️ Embrace Divine Wisdom Daily
+		  🕉️ Daily Divine Verse in Your Inbox
 		</h2>
 		<p class="text-lg text-gray-600 mb-8">
-		  Join our spiritual journey to discover timeless teachings of the Bhagavad Gita, 
-		  delivered through modern AI technology. Receive personalized guidance, verses, 
-		  and practical wisdom for your daily life.
+		  Start your day with sacred wisdom from the Bhagavad Gita. 
+          Receive daily verses with translations, interpretations, and practical guidance for modern life.
 		</p>
-	  </div>
-  
-	  <div class="max-w-xl mx-auto bg-white rounded-2xl shadow-xl p-8 md:p-10">
-		<div class="grid md:grid-cols-2 gap-8 mb-8">
-		  <div class="flex items-start space-x-3">
-			<div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-			  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-			  </svg>
-			</div>
-			<div>
-			  <h3 class="font-semibold text-gray-900 mb-1">Daily Wisdom</h3>
-			  <p class="text-gray-600 text-sm">Curated verses and interpretations from the Bhagavad Gita</p>
-			</div>
-		  </div>
-  
-		  <div class="flex items-start space-x-3">
-			<div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-			  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-			  </svg>
-			</div>
-			<div>
-			  <h3 class="font-semibold text-gray-900 mb-1">Spiritual Insights</h3>
-			  <p class="text-gray-600 text-sm">AI-powered guidance for modern life challenges</p>
-			</div>
-		  </div>
-  
-		  <div class="flex items-start space-x-3">
-			<div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-			  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-			  </svg>
-			</div>
-			<div>
-			  <h3 class="font-semibold text-gray-900 mb-1">Meditation Tips</h3>
-			  <p class="text-gray-600 text-sm">Practical meditation and mindfulness techniques</p>
-			</div>
-		  </div>
-  
-		  <div class="flex items-start space-x-3">
-			<div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-			  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-			  </svg>
-			</div>
-			<div>
-			  <h3 class="font-semibold text-gray-900 mb-1">Community Access</h3>
-			  <p class="text-gray-600 text-sm">Join a community of spiritual seekers</p>
-			</div>
-		  </div>
-		</div>
-  
-		<!-- EmailOctopus Embedded Form -->
-		<div id="email-form-wrapper" class="mt-8">
-		  <script async src="https://eocampaign1.com/form/ed6bb2fa-a571-11ef-b5c9-eda330e5b5ed.js" data-form="ed6bb2fa-a571-11ef-b5c9-eda330e5b5ed"></script>
-		</div>
-  
-		<p class="text-center text-sm text-gray-500 mt-6">
-		  Join 1000+ spiritual seekers receiving divine guidance every week
-		</p>
-	  </div>
-	</div>
-  </section>
+
+        <div class="bg-white rounded-2xl shadow-xl p-8 md:p-10 max-w-xl mx-auto">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="flex items-start space-x-3">
+              <div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900">Daily Verse</h3>
+                <p class="text-sm text-gray-600">A new verse every morning</p>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3">
+              <div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900">Translations</h3>
+                <p class="text-sm text-gray-600">In Sanskrit and English</p>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3">
+              <div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900">Interpretations</h3>
+                <p class="text-sm text-gray-600">Modern life applications</p>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3">
+              <div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900">Daily Practice</h3>
+                <p class="text-sm text-gray-600">Actionable spiritual tips</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- EmailOctopus Form -->
+          <div id="email-form-wrapper" class="mt-8">
+            <script async src="https://eocampaign1.com/form/ed6bb2fa-a571-11ef-b5c9-eda330e5b5ed.js" 
+              data-form="ed6bb2fa-a571-11ef-b5c9-eda330e5b5ed">
+            </script>
+          </div>
+
+          <p class="text-center text-sm text-gray-500 mt-6">
+            Join 1000+ spiritual seekers receiving divine guidance every day
+          </p>
+        </div>
+      </div>
+    </div>
+</section>
   
 <section id="testimonials" class="min-h-screen bg-gray-100 py-16 md:min-h-[75vh]">
 	<h2>Testimonials</h2>
