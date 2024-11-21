@@ -74,7 +74,7 @@ const keywords = [
   'Indian Classical Music for Meditation AI',
   'Spiritual Mantras and Chants AI',
   'Gjam Technologies Founder',
-  'Gurdeep Singh Gjam Technologies',
+  'JAPAN GOR Gjam Technologies',
   'Gjam Technologies CEO',
   'Top Web Developers in Boston',
   'Best Web Development Company in Mumbai',
@@ -232,14 +232,16 @@ const keywords = [
 	<title>{title}</title>
 	<meta name="description" content={description} />
 	<meta name="keywords" content={keywords.join(', ')} />
-	<meta name="author" content="Japangor, Gjam Technologies" />
-	
+	<meta name="author" content="Gurdeep Singh, Gjam Technologies" />
+  
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://indian.gives/" />
 	<meta property="og:title" content={title} />
 	<meta property="og:description" content={description} />
 	<meta property="og:image" content="https://indian.gives/assets/og-image.png" />
+	<meta property="og:image:alt" content="Bhagavad Gita AI Chatbot by Gjam Technologies" />
+	<meta property="og:site_name" content="Indian Spiritual GPT" />
   
 	<!-- Twitter -->
 	<meta name="twitter:card" content="summary_large_image" />
@@ -247,11 +249,21 @@ const keywords = [
 	<meta name="twitter:title" content={title} />
 	<meta name="twitter:description" content={description} />
 	<meta name="twitter:image" content="https://indian.gives/assets/twitter-image.png" />
+	<meta name="twitter:image:alt" content="Bhagavad Gita AI Chatbot by Gjam Technologies" />
+	<meta name="twitter:site" content="@GjamTech" />
+	<meta name="twitter:creator" content="@GurdeepSinghGjam" />
   
 	<!-- Preload Important Assets -->
 	<link rel="preload" href="/main-logo.png" as="image" />
 	<link rel="preload" href="/student.webp" as="image" />
-	
+	<link rel="preload" href="/fonts/sanskrit-font.woff2" as="font" type="font/woff2" crossorigin />
+  
+	<!-- Favicons -->
+	<link rel="icon" href="/favicon.ico" sizes="any" />
+	<link rel="icon" href="/icon.svg" type="image/svg+xml" />
+	<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+	<link rel="manifest" href="/manifest.webmanifest" />
+  
 	<!-- Canonical URL -->
 	<link rel="canonical" href="https://indian.gives/" />
   
@@ -259,19 +271,33 @@ const keywords = [
 	<script type="application/ld+json">
 	  {JSON.stringify({
 		'@context': 'https://schema.org',
-		'@type': 'WebPage',
+		'@type': 'WebApplication',
 		name: title,
 		description,
 		url: 'https://indian.gives',
+		applicationCategory: 'SpiritualityApplication',
+		operatingSystem: 'All',
 		author: {
 		  '@type': 'Person',
-		  name: 'Japangor',
+		  name: 'JAPAN GOR',
 		  url: 'https://gjam.in',
+		  jobTitle: 'Founder and CEO',
+		  worksFor: {
+			'@type': 'Organization',
+			name: 'Gjam Technologies',
+			sameAs: ['https://gjam.in', 'https://www.linkedin.com/company/gjamtech/'],
+		  },
 		},
 		publisher: {
 		  '@type': 'Organization',
 		  name: 'Gjam Technologies',
 		  logo: 'https://indian.gives/assets/logo.png',
+		  sameAs: ['https://gjam.in', 'https://www.linkedin.com/company/gjamtech/'],
+		},
+		offers: {
+		  '@type': 'Offer',
+		  price: '0',
+		  priceCurrency: 'USD',
 		},
 		mainEntityOfPage: {
 		  '@type': 'WebPage',
