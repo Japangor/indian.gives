@@ -9,7 +9,7 @@
 	import Pricing from '$lib/components/pricing.svelte';
 	import Faqs from '$lib/components/faqs.svelte';
 	import { onMount } from 'svelte';
-	import type { Verse, VerseMatch, AIResponse, Message } from '$lib/types';
+	import type { Verse, VerseMatch, AIResponse, Message, DailyVerse, MeditationSession } from '$lib/types';
 	const defaultSuggestions = {
   spiritual: [
     "How can I find inner peace? 🧘",
@@ -52,37 +52,37 @@ function getDynamicSuggestions(input: string): string[] {
     practical: {
       keywords: ['how', 'way', 'method', 'practice', 'do', 'can', 'help'],
       templates: [
-        (topic) => `What steps can I take to master ${topic}? 🎯`,
-        (topic) => `Practical ways to apply ${topic} in daily life 📝`,
-        (topic) => `How to develop discipline in ${topic}? 💪`,
-        (topic) => `Simple practices for ${topic} 🌟`
+        (topic: any) => `What steps can I take to master ${topic}? 🎯`,
+        (topic: any) => `Practical ways to apply ${topic} in daily life 📝`,
+        (topic: any) => `How to develop discipline in ${topic}? 💪`,
+        (topic: any) => `Simple practices for ${topic} 🌟`
       ]
     },
     philosophical: {
       keywords: ['why', 'what', 'meaning', 'purpose', 'understand'],
       templates: [
-        (topic) => `What is the deeper meaning of ${topic}? 🤔`,
-        (topic) => `How does ${topic} relate to dharma? ☸️`,
-        (topic) => `Understanding the essence of ${topic} 📚`,
-        (topic) => `Why do we experience ${topic}? 🌌`
+        (topic: any) => `What is the deeper meaning of ${topic}? 🤔`,
+        (topic: any) => `How does ${topic} relate to dharma? ☸️`,
+        (topic: any) => `Understanding the essence of ${topic} 📚`,
+        (topic: any) => `Why do we experience ${topic}? 🌌`
       ]
     },
     spiritual: {
       keywords: ['divine', 'god', 'krishna', 'soul', 'spirit', 'peace'],
       templates: [
-        (topic) => `How does Krishna's wisdom illuminate ${topic}? 🕉️`,
-        (topic) => `The spiritual significance of ${topic} ✨`,
-        (topic) => `Divine perspective on ${topic} 🙏`,
-        (topic) => `Connecting ${topic} with higher consciousness 🌟`
+        (topic: any) => `How does Krishna's wisdom illuminate ${topic}? 🕉️`,
+        (topic: any) => `The spiritual significance of ${topic} ✨`,
+        (topic: any) => `Divine perspective on ${topic} 🙏`,
+        (topic: any) => `Connecting ${topic} with higher consciousness 🌟`
       ]
     },
     transformational: {
       keywords: ['change', 'transform', 'overcome', 'improve', 'better'],
       templates: [
-        (topic) => `How can I transcend limitations in ${topic}? ⚡`,
-        (topic) => `Transform ${topic} through Gita's wisdom 🦋`,
-        (topic) => `Breaking free from ${topic} barriers 🚀`,
-        (topic) => `Evolution of consciousness through ${topic} 🌱`
+        (topic: any) => `How can I transcend limitations in ${topic}? ⚡`,
+        (topic: any) => `Transform ${topic} through Gita's wisdom 🦋`,
+        (topic: any) => `Breaking free from ${topic} barriers 🚀`,
+        (topic: any) => `Evolution of consciousness through ${topic} 🌱`
       ]
     }
   };
@@ -245,18 +245,157 @@ $: {
       error = 'Failed to load verses database';
     }
   }
+// Function to get meditation guidance
+async function getMeditationGuidance() {
+  loading = true;
+  error = null;
+
+  try {
+    const query = `Meditation techniques and guidance for ${meditationType} level practitioners from Bhagavad Gita`;
+    const matchedVerses = findMatchingVerses(query);
+
+    if (!matchedVerses.length) {
+      throw new Error('No relevant verses found for meditation guidance.');
+    }
+
+    const response = await generateResponse(query, matchedVerses);
+
+    meditationResult = {
+      type: meditationType,
+      duration: extractDuration(response),
+      mantras: extractMantras(response), 
+      guidance: response,
+      verses: matchedVerses
+    };
+  } catch (err) {
+    console.error('Meditation guidance error:', err);
+    error = err instanceof Error ? err.message : 'Failed to get meditation guidance'; 
+  } finally {
+    loading = false;
+  }
+}
+let activeFeature: 'chat' | 'karma' | 'meditation' | 'verse' | null = 'chat';
+let karmaAction = '';
+let karmaContext = '';
+let meditationType: 'basic' | 'intermediate' | 'advanced' = 'basic';
+let karmaResult: any = null; 
+let meditationResult: MeditationSession | null = null;
+let dailyVerse: DailyVerse | null = null;
+async function getDailyVerse(): Promise<void> {
+  loading = true;
+  error = null;
+
+  try {
+    if (!verses || verses.length === 0) {
+      throw new Error('Verses database not loaded');  
+    }
+
+    const randomIndex = Math.floor(Math.random() * verses.length);
+    const selectedVerse = verses[randomIndex];
+
+    if (!selectedVerse) {
+      throw new Error('Failed to select verse');
+    }
+
+    // Format the verse object
+    const verseObj = {
+      chapter: Math.floor(selectedVerse.index / 1000),
+      verse: selectedVerse.index % 1000, 
+      text: selectedVerse.text,
+      reference: selectedVerse.index.toString()
+    };
+
+    const query = `Provide deep spiritual insight for this verse from Bhagavad Gita: Chapter ${verseObj.chapter}, Verse ${verseObj.verse}`;
+    const response = await generateResponse(query, [verseObj]);
+
+    // Parse the response into sections
+    const sections = response.split('\n\n');
+
+    dailyVerse = {
+      verse: verseObj,
+      interpretation: extractSection(response, 'Interpretation') || sections[0],
+      application: extractSection(response, 'Application') || sections[1], 
+      practicalSteps: extractPracticalSteps(response)
+    };
+
+  } catch (err) {
+    console.error('Daily verse error:', err);
+    error = err instanceof Error ? err.message : 'Failed to get daily verse';
+    dailyVerse = null;
+  } finally {
+    loading = false;
+  }
+}
+async function analyzeKarma() {
+  if (!karmaAction || !karmaContext) return;
+
+  loading = true;
+  error = null;
+
+  try {
+    const query = `How does Krishna's teaching guide us about ${karmaAction} in the context of ${karmaContext}?`;
+    const matchedVerses = findMatchingVerses(query);
+
+    if (!matchedVerses.length) {
+      throw new Error('No relevant verses found for this action.');
+    }
+
+    const response = await generateResponse(query, matchedVerses);
+    const dharmaScore = extractDharmaScore(response);
+
+    karmaResult = {
+      score: dharmaScore,
+      guidance: response,
+      verses: matchedVerses
+    };
+  } catch (err) {
+    console.error('Karma analysis error:', err);
+    error = err instanceof Error ? err.message : 'Failed to analyze karma';
+  } finally {
+    loading = false;
+  }
+}
+// Function to get daily verse
 
 
+// Utility functions
+function extractDharmaScore(response: string): number {
+  const scoreMatch = response.match(/Dharma Score:?\s*(\d+)/i);
+  return scoreMatch ? Math.min(100, Math.max(0, parseInt(scoreMatch[1]))) : 50;
+}
 
+function extractDuration(response: string): number {
+  const durationMatch = response.match(/Duration:?\s*(\d+)/i);
+  return durationMatch ? parseInt(durationMatch[1]) : 20;
+}
+
+function extractMantras(response: string): string[] {
+  const mantraSection = response.match(/Sanskrit Mantras:?\s*([\s\S]*?)(?:\n\n|\d\.)/i);
+  return mantraSection  
+    ? mantraSection[1].split('\n').filter(line => line.trim().length > 0)
+    : [];
+}
+
+function extractSection(response: string, sectionName: string): string {
+  const sectionMatch = response.match(new RegExp(`${sectionName}:?\\s*([\\s\\S]*?)(?:\\n\\n|\\d\\.)`));
+  return sectionMatch ? sectionMatch[1].trim() : '';
+}
+
+function extractPracticalSteps(response: string): string[] {
+  const stepsSection = extractSection(response, 'Practical Steps');
+  return stepsSection
+    .split(/\n/)
+    .map(step => step.replace(/^\d+\.\s*/, '').trim())
+    .filter(step => step.length > 0); 
+}
 // Load verses on mount
 onMount(async () => {
   try {
-    const response = await fetch('/api/verses');
-    if (!response.ok) throw new Error('Failed to load verses');
-    verses = await response.json();
+    await loadVerses();
+    await getDailyVerse(); // Load initial daily verse
   } catch (err) {
-    console.error('Error loading verses:', err);
-    error = 'Failed to load verses database';
+    console.error('Error loading verses or daily verse:', err);
+    error = 'Failed to load verses database or daily verse';
   }
 });
 
@@ -371,7 +510,62 @@ async function generateResponse(query: string, matchedVerses: VerseMatch[]): Pro
       loading = false;
     }
   }
+export function generateDynamicSuggestions(input: string): string[] {
+  if (!input.trim()) {
+    return [
+      "How can I find inner peace? 🧘‍♂️",
+      "What is the purpose of karma? ⚡",
+      "Guide me in difficult decisions 🤔",
+      "Understanding divine love 💝"
+    ];
+  }
 
+  const perspectiveTemplates = {
+    practical: {
+      keywords: ['how', 'way', 'method', 'practice', 'do', 'can', 'help'],
+      templates: [
+        (topic: string) => `What steps can I take to master ${topic}? 🎯`,
+        (topic: string) => `Practical ways to apply ${topic} in daily life 📝`,
+        (topic: string) => `How to develop discipline in ${topic}? 💪`,
+        (topic: string) => `Simple practices for ${topic} 🌟`
+      ]
+    },
+    philosophical: {
+      keywords: ['why', 'what', 'meaning', 'purpose', 'understand'],
+      templates: [
+        (topic: string) => `What is the deeper meaning of ${topic}? 🤔`,
+        (topic: string) => `How does ${topic} relate to dharma? ☸️`,
+        (topic: string) => `Understanding the essence of ${topic} 📚`,
+        (topic: string) => `Why do we experience ${topic}? 🌌`
+      ]
+    },
+    spiritual: {
+      keywords: ['divine', 'god', 'krishna', 'soul', 'spirit', 'peace'],
+      templates: [
+        (topic: string) => `How does Krishna's wisdom illuminate ${topic}? 🕉️`,
+        (topic: string) => `The spiritual significance of ${topic} ✨`,
+        (topic: string) => `Divine perspective on ${topic} 🙏`,
+        (topic: string) => `Connecting ${topic} with higher consciousness 🌟`
+      ]
+    }
+  };
+
+  const topic = input.replace(/^(how|what|why|when|where|which)/i, '')
+    .replace(/[?.,!]/g, '')
+    .trim();
+
+  const suggestions: string[] = [];
+  Object.values(perspectiveTemplates).forEach(perspective => {
+    const template = perspective.templates[Math.floor(Math.random() * perspective.templates.length)];
+    suggestions.push(template(topic));
+  });
+
+  suggestions.push(`What chapter of Gita best addresses ${topic}? 📖`);
+
+  return [...new Set(suggestions)]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 4);
+}
   // Improved suggestion handler
   function handleSuggestion(suggestion: string) {
     if (!suggestion) return;
@@ -496,84 +690,296 @@ async function generateResponse(query: string, matchedVerses: VerseMatch[]): Pro
 	<div class="container mx-auto max-w-4xl px-4">
 	  <h2 class="text-center text-3xl font-bold mb-8">
 		Experience Divine Guidance
-		<span class="block text-lg font-normal text-gray-600 mt-2">Ask Krishna for guidance on any aspect of life</span>
+		<span class="block text-lg font-normal text-gray-600 mt-2">Choose your path to spiritual wisdom</span>
 	  </h2>
   
-	  <div class="bg-white rounded-xl shadow-xl p-6 md:p-8">
-		<!-- Question Input -->
-		<div class="mb-6">
-		  <input
-			type="text"
-			bind:value={question}
-			placeholder="🔍 Ask your spiritual question here..."
-			class="w-full p-4 rounded-lg border border-primary/30 focus:ring-2 focus:ring-primary focus:border-transparent bg-white/50 backdrop-blur-sm"
-		  />
-		</div>
-  
-		<!-- Suggestions -->
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-		  <!-- svelte-ignore missing-declaration -->
-		  {#each suggestions as suggestion}
-		  <button
-		  on:click={() => handleSuggestion(suggestion)}
-		  class="text-left p-3 rounded-lg border border-primary/20 hover:bg-primary/10 transition-colors"
-		>
-		  {suggestion}
-		</button>
-		  {/each}
-		</div>
-  
-		<!-- Submit Button -->
-		<button
-		  on:click={handleSubmit}
-		  class="w-full bg-primary text-white py-4 rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50"
-		  disabled={loading}
-		>
-		  {loading ? '॥ Seeking divine wisdom... ॥' : '🙏 Seek Divine Guidance'}
-		</button>
-  
-		<!-- Error Message -->
-		{#if error}
-		  <div class="mt-6 p-4 bg-red-50 text-red-600 rounded-lg border border-red-200" in:fade>
-			{error}
+	  <!-- Feature Selection -->
+	  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+		{#each [
+		  { id: 'chat', label: 'Seek Guidance', icon: '🕉️', description: 'Get personalized answers to your spiritual questions' },
+		  { id: 'karma', label: 'Karma Compass', icon: '⚖️', description: 'Evaluate your actions through the lens of dharma' },
+		  { id: 'meditation', label: 'Meditation Guide', icon: '🧘‍♂️', description: 'Discover meditation techniques from the Gita' },
+		  { id: 'verse', label: 'Daily Verse', icon: '📜', description: 'Receive divine wisdom from a randomly selected verse' }
+		] as feature}
+		  <div 
+			class="flex items-center p-6 rounded-xl border-2 transition-all transform hover:scale-105 {activeFeature === feature.id ? 'border-primary bg-primary text-white shadow-lg' : 'border-primary/30 hover:border-primary'}"
+			on:click={() => {
+			  activeFeature = feature.id;
+			  if (feature.id === 'verse') getDailyVerse();
+			}}
+		  >
+			<div class="text-4xl mr-4">{feature.icon}</div>
+			<div>
+			  <h3 class="text-xl font-semibold mb-1">{feature.label}</h3>
+			  <p class="text-gray-600">{feature.description}</p>
+			</div>
 		  </div>
-		{/if}
+		{/each}
+	  </div>
   
-		<!-- Response -->
-		{#if response}
-		  <div class="mt-8 space-y-6" in:fly={{ y: 20, duration: 500 }}>
-			<!-- Divine Answer -->
-			<div class="bg-gradient-to-r from-orange-50 to-purple-50 rounded-lg p-6">
-			  <div class="text-primary text-lg mb-4">॥ श्री कृष्ण उवाच ॥</div>
-			  <div class="prose max-w-none whitespace-pre-line">
-				{response.answer}
+	  <div class="bg-white rounded-xl shadow-xl p-6 md:p-8">
+		<!-- Chat Feature -->
+		{#if activeFeature === 'chat'}
+		  <div class="space-y-6" in:fade>
+			<h3 class="text-2xl font-semibold text-center">🕉️ Seek Divine Guidance</h3>
+			<p class="text-center text-gray-600">Get personalized answers to your spiritual questions from Sri Krishna</p>
+			
+			<div class="relative">
+			  <input
+				type="text"
+				bind:value={question}
+				placeholder="Ask your spiritual question here..."
+				class="w-full p-4 pr-12 rounded-lg border border-primary/30 focus:ring-2 focus:ring-primary focus:border-transparent bg-white/50 backdrop-blur-sm"
+			  />
+			  <button 
+				class="absolute right-0 top-0 bottom-0 px-3 text-xl rounded-r-lg text-primary hover:bg-primary/10 transition-colors"
+				on:click={handleSubmit}
+				disabled={loading}  
+			  >
+				{#if loading}
+				  <span class="animate-spin">🌀</span>
+				{:else}
+				  <span>🔍</span>  
+				{/if}
+			  </button>
+			</div>
+  
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+			  {#each suggestions as suggestion}
+				<button
+				  on:click={() => handleSuggestion(suggestion)}
+				  class="text-left p-3 rounded-lg border border-primary/20 hover:bg-primary/10 transition-colors"  
+				>
+				  {suggestion}
+				</button>
+			  {/each}
+			</div>
+  
+			{#if response}
+			  <div class="mt-8 space-y-6">
+				<div class="bg-gradient-to-r from-orange-50 to-purple-50 rounded-lg p-6">
+				  <div class="text-primary text-lg mb-4">॥ श्री कृष्ण उवाच ॥</div>
+				  <div class="prose max-w-none whitespace-pre-line">
+					{response.answer}  
+				  </div>
+				</div>
+  
+				{#if response.verses.length}
+				  <div class="space-y-4">
+					<h3 class="text-xl font-semibold text-primary">📜 Relevant Verses</h3>  
+					{#each response.verses as verse}
+					  <div class="verse-box bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-primary/20">
+						<div class="text-primary mb-2">Chapter {verse.chapter}, Verse {verse.verse}</div>
+						<div class="text-gray-700 mb-2">{verse.text}</div>
+						<button 
+						  class="text-sm text-primary hover:underline"
+						  on:click={() => translateVerse(verse)}  
+						>
+						  Translate to {verse.translation ? 'English' : 'Hindi'}
+						</button>
+						{#if verse.translation}
+						  <div class="mt-2 text-gray-600">{verse.translation}</div>  
+						{/if}
+					  </div>
+					{/each}
+				  </div>
+				{/if}
+			  </div>
+			{/if}
+		  </div>
+  
+		<!-- Karma Compass Feature -->  
+		{:else if activeFeature === 'karma'}
+		  <div class="space-y-6" in:fade>
+			<h3 class="text-2xl font-semibold text-center">🧭 Karma Compass</h3>
+			<p class="text-center text-gray-600">Evaluate your actions and decisions through the lens of dharma</p>
+  
+			<div class="space-y-4">
+			  <div>
+				<label class="block text-sm font-medium mb-2">Action or Decision</label>
+				<input
+				  type="text"
+				  bind:value={karmaAction}  
+				  placeholder="What action are you considering?"
+				  class="w-full p-3 rounded-lg border focus:ring-2 focus:ring-primary"
+				/>  
+			  </div>
+  
+			  <div>
+				<label class="block text-sm font-medium mb-2">Context</label>  
+				<textarea
+				  bind:value={karmaContext}
+				  placeholder="Describe the situation and circumstances..."  
+				  class="w-full p-3 rounded-lg border focus:ring-2 focus:ring-primary h-32"
+				></textarea>
 			  </div>
 			</div>
   
-			<!-- Referenced Verses -->
-			{#if response.verses.length}
-			  <div class="space-y-4">
-				<h3 class="text-xl font-bold text-primary">📜 Referenced Verses</h3>
-				{#each response.verses as verse}
-				  <div class="verse-box bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-primary/20" 
-					   in:fly={{ y: 20, duration: 300 }}>
-					<div class="text-primary mb-2">Chapter {verse.chapter}, Verse {verse.verse}</div>
-					<div class="text-gray-700">{verse.text}</div>
+			<button
+			  on:click={analyzeKarma}  
+			  disabled={loading || !karmaAction || !karmaContext}
+			  class="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50"  
+			>
+			  {loading ? "Analyzing..." : "Analyze Karma"}
+			</button>
+  
+			{#if karmaResult}
+			  <div class="mt-6 space-y-6">
+				<div class="bg-gradient-to-r from-orange-50 to-purple-50 rounded-lg p-6">
+				  <div class="text-center">
+					<div class="text-4xl font-bold text-primary mb-2">
+					  {karmaResult.score}  
+					</div>
+					<div class="text-sm text-gray-600">Dharma Score</div>
 				  </div>
-				{/each}
+				</div>
+  
+				<div class="prose max-w-none">
+				  <div class="whitespace-pre-line">
+					{karmaResult.guidance}
+				  </div>  
+				</div>
+  
+				{#if karmaResult.verses.length}
+				  <div class="space-y-4">
+					<h3 class="text-xl font-semibold text-primary">📜 Gita Insights</h3>
+					{#each karmaResult.verses as verse}
+					  <div class="verse-box bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-primary/20">
+						<div class="text-primary mb-2">Chapter {verse.chapter}, Verse {verse.verse}</div>
+						<div class="text-gray-700 mb-2">{verse.text}</div>
+						<button
+						  class="text-sm text-primary hover:underline"
+						  on:click={() => translateVerse(verse)}
+						>
+						  Translate to {verse.translation ? 'English' : 'Hindi'}  
+						</button>
+						{#if verse.translation}
+						  <div class="mt-2 text-gray-600">{verse.translation}</div>
+						{/if}  
+					  </div>
+					{/each}
+				  </div>
+				{/if}
 			  </div>
 			{/if}
+		  </div>
+  
+		<!-- Meditation Guide Feature --> 
+		{:else if activeFeature === 'meditation'}
+		  <div class="space-y-6" in:fade>
+			<h3 class="text-2xl font-semibold text-center">🧘‍♂️ Meditation Guide</h3>
+			<p class="text-center text-gray-600">Discover meditation techniques and guidance from the Gita</p>
+  
+			<div class="flex justify-center gap-4 mb-6">
+			  {#each ['basic', 'intermediate', 'advanced'] as level}
+				<button
+				  class="px-6 py-3 rounded-lg border-2 transition-all {meditationType === level ? 'border-primary bg-primary text-white' : 'border-primary/30 hover:border-primary'}"
+				  on:click={() => meditationType = level}
+				>
+				  {level.charAt(0).toUpperCase() + level.slice(1)}
+				</button>  
+			  {/each}
+			</div>
+  
+			<button
+			  on:click={getMeditationGuidance}
+			  disabled={loading}  
+			  class="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50"
+			>
+			  {loading ? "Seeking guidance..." : "Get Meditation Guidance"}  
+			</button>
+  
+			{#if meditationResult}
+			  <div class="mt-6 space-y-6">
+				<div class="bg-gradient-to-r from-orange-50 to-purple-50 rounded-lg p-6">
+				  <div class="mb-4">
+					<span class="text-primary font-semibold">Duration:</span> {meditationResult.duration} minutes  
+				  </div>
+				  <div class="prose max-w-none whitespace-pre-line">
+					{meditationResult.guidance}
+				  </div>
+				</div>
+  
+				{#if meditationResult.mantras.length}
+				  <div class="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-primary/20">
+					<h4 class="font-semibold text-primary mb-4">Sanskrit Mantras</h4>
+					<div class="space-y-2">
+					  {#each meditationResult.mantras as mantra}  
+						<div class="text-gray-700 flex items-center">
+						  <span class="mr-2">🕉️</span>
+						  {mantra}  
+						</div>
+					  {/each}
+					</div>
+				  </div>
+				{/if}
+			  </div>
+			{/if}
+		  </div>
+  
+		<!-- Daily Verse Feature -->
+		{:else if activeFeature === 'verse'}  
+		  <div class="space-y-6" in:fade>
+			<h3 class="text-2xl font-semibold text-center">📜 Verse of the Day</h3>
+			<p class="text-center text-gray-600">Receive divine wisdom from a randomly selected verse of the Bhagavad Gita</p>
+  
+			<button
+			  on:click={getDailyVerse}
+			  disabled={loading}
+			  class="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50"  
+			>
+			  {loading ? "Seeking wisdom..." : "Get New Verse"}
+			</button>
+  
+			{#if dailyVerse}
+			  <div class="mt-6 space-y-6">
+				<div class="bg-gradient-to-r from-orange-50 to-purple-50 rounded-lg p-6">
+				  <div class="text-primary mb-4">
+					Chapter {dailyVerse.verse.chapter}, Verse {dailyVerse.verse.verse}  
+				  </div>
+				  <div class="text-lg font-medium mb-4">
+					{dailyVerse.verse.text}
+				  </div>
+				  <button
+					class="text-sm text-primary hover:underline mb-4"  
+					on:click={() => translateVerse(dailyVerse.verse)}
+				  >
+					Translate to {dailyVerse.verse.translation ? 'English' : 'Hindi'}
+				  </button>
+				  {#if dailyVerse.verse.translation}
+					<div class="text-gray-600 mb-4">{dailyVerse.verse.translation}</div>
+				  {/if}  
+				  <div class="prose max-w-none">
+					<h4 class="text-primary font-semibold">Interpretation</h4>
+					<p>{dailyVerse.interpretation}</p>
+  
+					<h4 class="text-primary font-semibold mt-4">Modern Application</h4>  
+					<p>{dailyVerse.application}</p>
+  
+					{#if dailyVerse.practicalSteps.length}
+					  <h4 class="text-primary font-semibold mt-4">Practical Steps</h4>
+					  <ul class="list-disc list-inside">
+						{#each dailyVerse.practicalSteps as step}  
+						  <li>{step}</li>
+						{/each}
+					  </ul>
+					{/if}
+				  </div>
+				</div>
+			  </div>
+			{/if}
+		  </div>
+		{/if}
+  
+		<!-- Error Message -->
+		{#if error}  
+		  <div class="mt-6 p-4 bg-red-50 text-red-600 rounded-lg border border-red-200" in:fade>
+			{error}
 		  </div>
 		{/if}
 	  </div>
 	</div>
   </section>
-<section id="howItWorks" class="min-h-screen py-16 md:min-h-[75vh]">
-	<h2>How it works</h2>
-	<p class="text-center">Using INDIAN.GIVES is very simple.</p>
-
-	<HowItWorks />
-</section>
 <section id="subscribe" class="min-h-screen py-16 md:min-h-[75vh] bg-gradient-to-b from-white to-gray-50">
 	<div class="container mx-auto px-4">
 	  <div class="max-w-4xl mx-auto text-center mb-12">

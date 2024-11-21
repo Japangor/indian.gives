@@ -105,7 +105,7 @@ export async function generateResponse(
                  Verses: ${versesContext}
                  
                  Provide guidance in this format:
-                 1. Divine Answer (Brief and compassionate)
+                 1. Divine Answer(HINDI AND ENGLISH WITH REAL LIFE MEANING) (Brief and compassionate)
                  2. Verse Wisdom (How these verses apply)
                  3. Practical Steps (Daily life application)
                  4. Sanskrit Blessing (A relevant shloka with meaning)`

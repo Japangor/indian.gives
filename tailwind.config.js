@@ -23,6 +23,8 @@ const config = {
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))',
+					dark: '#FF5252',
+
 					light: 'hsl(var(--primary-light))'
 				},
 				secondary: {
@@ -37,6 +39,9 @@ const config = {
 					DEFAULT: 'hsl(var(--muted))',
 					foreground: 'hsl(var(--muted-foreground))'
 				},
+				fontFamily: {
+					sanskrit: ['Sanskrit', 'Arial Unicode MS', 'sans-serif'],
+				  },
 				accent: {
 					DEFAULT: 'hsl(var(--accent))',
 					foreground: 'hsl(var(--accent-foreground))'
@@ -59,7 +64,9 @@ const config = {
 				sans: ['Quicksand', 'sans-serif']
 			}
 		}
-	}
+	},
+	darkMode: 'class',
+
 };
 
 export default config;
