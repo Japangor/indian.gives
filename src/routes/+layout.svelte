@@ -321,7 +321,7 @@ const keywords = [
 	  }
 	}
 	
-	const GA_MEASUREMENT_ID = 'G-XXXXXXXXXX'; // Replace with your actual GA4 measurement ID
+	const GA_MEASUREMENT_ID = 'G-SG3DHRCZMW'; // Replace with your actual GA4 measurement ID
 
 	const initializeGA = () => {
   const script = document.createElement('script');
