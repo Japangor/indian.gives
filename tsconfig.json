@@ -8,6 +8,7 @@
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
 		"sourceMap": true,
+		"types": ["gtag.js"],
 		"strict": true,
 		"moduleResolution": "bundler"
 	}

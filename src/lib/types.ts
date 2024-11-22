@@ -11,7 +11,10 @@ export interface Verse {
     chapter: number;
     verse: number;
   }
-  
+  export interface Window {
+    dataLayer: any[];
+    gtag: (...args: any[]) => void;
+  }
   export interface AIResponse {
     answer: string;
     verses: VerseMatch[];

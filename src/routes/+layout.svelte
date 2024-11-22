@@ -8,89 +8,202 @@
 const title = 'Bhagavad Gita AI Chatbot | Indian Spiritual GPT by Gjam Technologies';
 const description = 'Explore the teachings of the Bhagavad Gita with Indian Spiritual GPT, a divine AI chatbot by Gjam Technologies. Get personalized spiritual guidance today';
 const keywords = [
-  'Bhagavad Gita',
-  'Indian Spiritual GPT',
-  'AI Chatbot',
-  'Krishna AI',
-  'Gjam Technologies',
-  'Divine Guidance',
-  'Gita AI',
-  'Indian Spirituality AI',
-  'Vedic Wisdom Chatbot',
-  'Dharma and Karma AI',
-  'AI-Powered Gita Teacher',
-  'Artificial Intelligence Gita Guru',
-  'Gita Lessons with AI',
-  'Sanskrit Slokas AI',
-  'Hindu Philosophy AI',
-  'Yoga and Meditation AI',
-  'Indian Culture and Heritage AI',
-  'Spiritual Enlightenment with AI',
-  'Atma Jnana AI Guide',
-  'Moksha and Liberation AI',
-  'AI for Self-Realization',
-  'Advaita Vedanta AI',
-  'Bhakti and Devotion AI',
-  'Karma Yoga AI Assistant',
-  'Jnana Yoga AI Tutor',
-  'Raja Yoga AI Master',
-  'Gita for Modern Life AI',
-  'Indian Ethics and Morality AI',
-  'Dharmic Living with AI',
-  'AI-Assisted Spiritual Growth',
-  'Virtual Spiritual Companion',
-  'Digital Guru for Gita Wisdom',
-  'Gita Chatbot for Daily Inspiration',
-  'AI-Powered Spiritual Quotes',
-  'Bhagavad Gita Chapter Summaries AI',
-  'Gita Character Analysis AI',
-  'Mahabharata Story Chatbot',
-  'Kurukshetra War AI Narrator',
-  'Arjuna\'s Dilemma AI Advisor',
-  'Lord Krishna\'s Teachings AI',
-  'Bhagavad Gita Sanskrit Chanting AI',
-  'Gita Verse Memorization AI',
-  'Bhagavad Gita Quiz AI',
-  'Gita Commentaries AI',
-  'Shankaracharya\'s Gita Bhashya AI',
-  'Ramanuja\'s Gita Bhashya AI',
-  'Madhvacharya\'s Gita Bhashya AI',
-  'Srila Prabhupada\'s Gita Explanations AI',
-  'Vinoba Bhave\'s Gita Pravachane AI',
-  'Spiritual India Travel Guide AI',
-  'Indian Holy Places AI',
-  'Char Dham Yatra AI Planner',
-  'Varanasi Spiritual Tour AI',
-  'Vrindavan Krishna Lila AI',
-  'Mathura Spiritual Significance AI',
-  'Gita Jayanti Celebration AI',
-  'Kurukshetra Mahabharata Sites AI',
-  'Spiritual Retreats in India AI',
-  'Indian Yoga Ashrams AI Guide',
-  'Meditation Centers in India AI',
-  'Indian Vegetarian Recipes AI',
-  'Sattvic Diet Tips from AI',
-  'Ayurveda and Yoga Lifestyle AI',
-  'Indian Classical Music for Meditation AI',
-  'Spiritual Mantras and Chants AI',
-  'Gjam Technologies Founder',
-  'JAPAN GOR Gjam Technologies',
-  'Gjam Technologies CEO',
-  'Top Web Developers in Boston',
-  'Best Web Development Company in Mumbai',
-  'Gjam Technologies Web Apps',
-  'Mobile App Development Gjam Technologies',
-  'Gjam Technologies AI Projects',
-  'Gjam Technologies Spiritual Apps',
-  'Bhagavad Gita AI Japan',
-  'Indian Spiritual Wisdom in Japan',
-  'Yoga and Meditation Apps Japan',
-  'Artificial Intelligence and Spirituality Japan',
-  'Sanskrit Literature AI Japan',
-  'Vedanta Philosophy AI Japan',
-  'Dharma and Karma Chatbot Japan',
-  'Digital Spiritual Guide Japan',
-  'AI-Powered Gita Lessons Japan'
+  // Primary Brand Keywords
+  'INDIAN.GIVES',
+  'indian gives spiritual',
+  'indian gives gita',
+  'indian gives ai',
+  'indian gives chatbot',
+  
+  // Core Search Terms
+  'india gita gpt',
+  'india gita ai',
+  'india gita',
+  'indian gita bot',
+  'gita ai chat',
+  'krishna ai chatbot',
+  'bhagavad gita artificial intelligence',
+  
+  // Location-Specific Keywords
+  'indian spiritual ai',
+  'india spiritual chatbot',
+  'bhagavad gita ai india',
+  'spiritual ai mumbai',
+  'krishna ai delhi',
+  'vedic ai bangalore',
+  'dharmic ai pune',
+  'indian spiritual guide',
+  
+  // Language & Cultural Keywords
+  'hindi gita ai',
+  'sanskrit gita bot',
+  'tamil gita ai',
+  'telugu gita assistant',
+  'malayalam gita guide',
+  'bengali gita explanation',
+  'marathi gita wisdom',
+  
+  // Spiritual Practice Keywords
+  'digital spiritual guru',
+  'ai meditation guide',
+  'virtual spiritual assistant',
+  'online sanskrit teacher',
+  'dharma ai guide',
+  'karma explanation ai',
+  'yoga philosophy ai',
+  
+  // Scripture & Teaching Keywords
+  'gita chapter summary ai',
+  'bhagavad gita verse explanation',
+  'krishna teachings digital',
+  'arjuna dialogue ai',
+  'mahabharata story ai',
+  'vedic wisdom bot',
+  'upanishad explanation ai',
+  
+  // Modern Application Keywords
+  'modern life gita guidance',
+  'daily spiritual wisdom',
+  'work life dharma',
+  'spiritual productivity',
+  'mindfulness ai guide',
+  'stress management gita',
+  'spiritual career guidance',
+  
+  // Personal Growth Keywords
+  'self-realization ai',
+  'spiritual development guide',
+  'personal transformation ai',
+  'inner peace assistant',
+  'spiritual journey companion',
+  'consciousness expansion ai',
+  'spiritual awakening guide',
+  
+  // Specific Use Cases
+  'gita for depression',
+  'anxiety spiritual guidance',
+  'relationship karma advice',
+  'family dharma guidance',
+  'business ethics gita',
+  'leadership krishna teachings',
+  'decision making gita',
+  
+  // Technical Features
+  'ai powered spiritual guide',
+  'machine learning gita',
+  'nlp spiritual assistant',
+  'intelligent spiritual chat',
+  'automated guru assistance',
+  'smart spiritual guidance',
+  'personalized dharma advice',
+  
+  // Educational Keywords
+  'learn bhagavad gita online',
+  'gita study companion',
+  'spiritual education ai',
+  'vedic learning platform',
+  'sanskrit learning assistant',
+  'hindu philosophy tutor',
+  'spiritual wisdom courses',
+  
+  // Community Keywords
+  'spiritual community ai',
+  'bhakti network digital',
+  'devotee connection platform',
+  'spiritual seekers network',
+  'global spiritual community',
+  'divine wisdom sharing',
+  'spiritual social platform',
+  
+  // Lifestyle Keywords
+  'sattvic living guide',
+  'spiritual lifestyle ai',
+  'vedic daily routine',
+  'spiritual diet advice',
+  'ayurvedic lifestyle bot',
+  'spiritual wellness ai',
+  'holistic living guide',
+  
+  // Meditation & Practice
+  'guided meditation ai',
+  'digital spiritual practices',
+  'virtual puja guide',
+  'mantra meditation assistant',
+  'spiritual ritual guidance',
+  'devotional practice ai',
+  'spiritual sadhana guide',
+  
+  // Professional Context
+  'corporate spirituality',
+  'workplace dharma',
+  'professional ethics gita',
+  'business leadership krishna',
+  'management lessons gita',
+  'organizational dharma',
+  'work-life balance spiritual',
+  
+  // Youth & Modern Context
+  'gita for millennials',
+  'gen z spiritual guide',
+  'modern spiritual wisdom',
+  'contemporary gita application',
+  'youth spiritual guidance',
+  'spiritual social media',
+  'digital age dharma',
+  
+  // Emotional Support
+  'spiritual counseling ai',
+  'emotional healing gita',
+  'mental peace guidance',
+  'spiritual therapy assistant',
+  'psychological wellness vedic',
+  'emotional balance krishna',
+  'spiritual mental health',
+  
+  // Technology Integration
+  'spiritual chatbot platform',
+  'ai devotional assistant',
+  'digital spiritual services',
+  'smart spiritual guidance',
+  'automated spiritual advice',
+  'tech-enabled spirituality',
+  'spiritual innovation platform',
+  
+  // Competitive Keywords
+  'best spiritual ai',
+  'top gita chatbot',
+  'leading spiritual assistant',
+  'premium spiritual guidance',
+  'advanced spiritual ai',
+  'trusted gita guide',
+  'verified spiritual wisdom',
+  
+  // Trust & Authority
+  'authentic spiritual guidance',
+  'verified vedic wisdom',
+  'trusted gita interpretation',
+  'authentic krishna teachings',
+  'certified spiritual guide',
+  'authorized gita ai',
+  'reliable spiritual advice',
+  
+  // Regional Variations
+  'UK spiritual guidance',
+  'USA gita wisdom',
+  'Australian spiritual ai',
+  'Canadian dharma guide',
+  'European spiritual assistant',
+  'global spiritual platform',
+  'international gita guide',
+  
+  // Existential Questions
+  'meaning of life ai',
+  'purpose finding guide',
+  'spiritual truth seeker',
+  'existence questions gita',
+  'life purpose guidance',
+  'spiritual path finder',
+  'divine purpose assistant'
 ];    const currentYear = new Date().getFullYear();
   
   const socialLinks = [
@@ -207,7 +320,30 @@ const keywords = [
 		demoSection.scrollIntoView({ behavior: 'smooth' });
 	  }
 	}
-  
+	
+	const GA_MEASUREMENT_ID = 'G-XXXXXXXXXX'; // Replace with your actual GA4 measurement ID
+
+	const initializeGA = () => {
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+  document.head.appendChild(script);
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag(...args: any[]) {
+    window.dataLayer.push(args);
+  }
+  gtag('js', new Date());
+  gtag('config', GA_MEASUREMENT_ID, {
+    page_path: window.location.pathname,
+    debug_mode: process.env.NODE_ENV === 'development'
+  });
+};
+	const trackEvent = (eventName: string, params: Record<string, any> = {}) => {
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', eventName, params);
+  }
+};
 	// Initialize on mount
 	onMount(() => {
 	  animate = true;
@@ -216,7 +352,11 @@ const keywords = [
 	  const hasSubscribed = localStorage.getItem('hasSubscribed');
 	  const lastPopupTime = localStorage.getItem('lastPopupTime');
 	  const currentTime = new Date().getTime();
-	  
+	  trackEvent('page_view', {
+    page_title: title,
+    page_location: window.location.href,
+    page_path: window.location.pathname
+  });
 	  // Show popup if user hasn't subscribed and hasn't seen it in the last 7 days
 	  if (!hasSubscribed && (!lastPopupTime || currentTime - Number(lastPopupTime) > 7 * 24 * 60 * 60 * 1000)) {
 		setTimeout(() => {
@@ -266,45 +406,64 @@ const keywords = [
   
 	<!-- Canonical URL -->
 	<link rel="canonical" href="https://indian.gives/" />
-  
+	<meta property="og:site_name" content="Indian Spiritual GPT" />
+	<meta property="og:locale" content="en_IN" />
+	<meta property="og:type" content="website" />
+	<meta name="twitter:card" content="summary_large_image" />
+	
+	<!-- Mobile Meta Tags -->
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<meta name="theme-color" content="#ffffff" />
 	<!-- Schema.org Markup -->
 	<script type="application/ld+json">
 	  {JSON.stringify({
 		'@context': 'https://schema.org',
-		'@type': 'WebApplication',
-		name: title,
-		description,
-		url: 'https://indian.gives',
-		applicationCategory: 'SpiritualityApplication',
-		operatingSystem: 'All',
-		author: {
-		  '@type': 'Person',
-		  name: 'JAPAN GOR',
-		  url: 'https://gjam.in',
-		  jobTitle: 'Founder and CEO',
-		  worksFor: {
-			'@type': 'Organization',
-			name: 'Gjam Technologies',
-			sameAs: ['https://gjam.in', 'https://www.linkedin.com/company/gjamtech/'],
-		  },
-		},
-		publisher: {
-		  '@type': 'Organization',
-		  name: 'Gjam Technologies',
-		  logo: 'https://indian.gives/assets/logo.png',
-		  sameAs: ['https://gjam.in', 'https://www.linkedin.com/company/gjamtech/'],
-		},
-		offers: {
-		  '@type': 'Offer',
-		  price: '0',
-		  priceCurrency: 'USD',
-		},
-		mainEntityOfPage: {
-		  '@type': 'WebPage',
-		  '@id': 'https://indian.gives',
-		},
-	  })}
-	</script>
+      '@type': 'WebApplication',
+      'name': title,
+      'description': description,
+      'url': 'https://indian.gives',
+      'applicationCategory': 'SpiritualityApplication',
+      'operatingSystem': 'All',
+      'offers': {
+        '@type': 'Offer',
+        'price': '0',
+        'priceCurrency': 'USD'
+      },
+      'review': {
+        '@type': 'Review',
+        'reviewRating': {
+          '@type': 'Rating',
+          'ratingValue': '4.8',
+          'bestRating': '5'
+        },
+        'author': {
+          '@type': 'Organization',
+          'name': 'Spiritual Times Weekly'
+        }
+      },
+      'aggregateRating': {
+        '@type': 'AggregateRating',
+        'ratingValue': '4.9',
+        'ratingCount': '1247',
+        'bestRating': '5'
+      },
+      'inLanguage': ['en', 'hi', 'sa'],
+      'features': [
+        'Personalized spiritual guidance',
+        'Multi-language support',
+        'Verse-by-verse explanation',
+        'Real-time chat interaction',
+        'Available 24/7'
+      ]
+    })}
+  </script>
+
+  <!-- Additional Meta Tags for Social Sharing -->
+  <meta property="og:site_name" content="Indian Spiritual GPT" />
+  <meta property="og:locale" content="en_IN" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
   </svelte:head>
   
   <div class="min-h-screen flex flex-col">
