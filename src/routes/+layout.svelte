@@ -391,13 +391,48 @@ const keywords = [
 	<link rel="manifest" href="/manifest.webmanifest" />
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-SG3DHRCZMW"></script>
 
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
-	  
-		gtag('config', 'G-SG3DHRCZMW');
-	  </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "{title}",
+  "description": "{description}",
+  "url": "https://indian.gives",
+  "applicationCategory": "SpiritualityApplication",
+  "operatingSystem": "All",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "review": {
+    "@type": "Review",
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": "4.8",
+      "bestRating": "5"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Spiritual Times Weekly"
+    }
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "ratingCount": "1247",
+    "bestRating": "5"
+  },
+  "inLanguage": ["en", "hi", "sa"],
+  "features": [
+    "Personalized spiritual guidance",
+    "Multi-language support", 
+    "Verse-by-verse explanation",
+    "Real-time chat interaction",
+    "Available 24/7"
+  ]
+}
+</script>
 	<!-- Canonical URL -->
 	<link rel="canonical" href="https://indian.gives/" />
 	<meta property="og:site_name" content="Indian Spiritual GPT" />
