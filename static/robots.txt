@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://indian.gives/sitemap.xml
