@@ -3,7 +3,7 @@
 	import { fade, fly } from 'svelte/transition';
 	import { Facebook, Github, Instagram, Linkedin, Mail, Menu, Twitter, X } from 'lucide-svelte';
 	import '../app.css';
-  
+
 // SEO Configuration
 const title = 'Bhagavad Gita AI Chatbot | Indian Spiritual GPT by Gjam Technologies';
 const description = 'Explore the teachings of the Bhagavad Gita with Indian Spiritual GPT, a divine AI chatbot by Gjam Technologies. Get personalized spiritual guidance today';
@@ -323,22 +323,7 @@ const keywords = [
 	
 	const GA_MEASUREMENT_ID = 'G-SG3DHRCZMW'; // Replace with your actual GA4 measurement ID
 
-	const initializeGA = () => {
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-  document.head.appendChild(script);
 
-  window.dataLayer = window.dataLayer || [];
-  function gtag(...args: any[]) {
-    window.dataLayer.push(args);
-  }
-  gtag('js', new Date());
-  gtag('config', GA_MEASUREMENT_ID, {
-    page_path: window.location.pathname,
-    debug_mode: process.env.NODE_ENV === 'development'
-  });
-};
 	const trackEvent = (eventName: string, params: Record<string, any> = {}) => {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', eventName, params);
@@ -364,9 +349,10 @@ const keywords = [
 		  localStorage.setItem('lastPopupTime', currentTime.toString());
 		}, 5000);
 	  }
-	});
+	}); 
+
   </script>
-  
+ 
   <svelte:head>
 	<!-- SEO Meta Tags -->
 	<title>{title}</title>
@@ -403,7 +389,15 @@ const keywords = [
 	<link rel="icon" href="/icon.svg" type="image/svg+xml" />
 	<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 	<link rel="manifest" href="/manifest.webmanifest" />
-  
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-SG3DHRCZMW"></script>
+
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+	  
+		gtag('config', 'G-SG3DHRCZMW');
+	  </script>
 	<!-- Canonical URL -->
 	<link rel="canonical" href="https://indian.gives/" />
 	<meta property="og:site_name" content="Indian Spiritual GPT" />
