@@ -11,6 +11,9 @@ export interface Verse {
     chapter: number;
     verse: number;
   }
+  export function trackEvent(eventName: string, params: Record<string, any> = {}): void {
+    // ... rest of the function
+  }
   export interface Window {
     dataLayer: any[];
     gtag: (...args: any[]) => void;

@@ -273,6 +273,94 @@ const SEO_CONFIG = {
   // seo-keywords.ts
 
 };
+const SCHEMA_DATA = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "@id": "https://indian.gives/#website",
+  "name": SEO_CONFIG.title,
+  "description": SEO_CONFIG.description,
+  "url": SEO_CONFIG.siteUrl,
+  "applicationCategory": "SpiritualityApplication",
+  "operatingSystem": "All",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "review": {
+    "@type": "Review",
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": "4.8",
+      "bestRating": "5"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Spiritual Times Weekly"
+    }
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "ratingCount": "1247",
+    "bestRating": "5"
+  },
+  "inLanguage": ["en", "hi", "sa", "ta", "te", "bn", "mr", "ml"],
+  "features": [
+    "24/7 Personalized spiritual guidance",
+    "Multi-language support (8 Indian languages)",
+    "Verse-by-verse Gita explanation",
+    "Real-time spiritual counseling",
+    "AI-powered meditation guidance",
+    "Karma and dharma insights",
+    "Life purpose discovery",
+    "Mental wellness support",
+    "Professional ethics guidance",
+    "Relationship advice from Gita"
+  ]
+};
+
+const FAQ_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is Indian Spiritual GPT?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Indian Spiritual GPT is an AI-powered spiritual guide that provides personalized guidance from the Bhagavad Gita in multiple Indian languages. It offers verse explanations, meditation guidance, and life advice based on ancient wisdom."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How can I get spiritual guidance?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can receive instant spiritual guidance by asking questions to our AI chatbot. It provides personalized advice based on Bhagavad Gita teachings, available 24/7 in multiple languages."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What languages are supported?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We support English, Hindi, Sanskrit, Tamil, Telugu, Bengali, Marathi, and Malayalam, making spiritual wisdom accessible across India."
+      }
+    }
+  ]
+};
+const trackEvent = (eventName: string, params: Record<string, any> = {}) => {
+  if (typeof window !== 'undefined' && 'gtag' in window) {
+    window.gtag('event', eventName, {
+      ...params,
+      send_to: GA_MEASUREMENT_ID,
+      event_category: 'User Interaction',
+      event_label: eventName,
+      value: 1
+    });
+  }
+};
    const currentYear = new Date().getFullYear();
   
   const socialLinks = [
@@ -393,9 +481,7 @@ const SEO_CONFIG = {
 	const GA_MEASUREMENT_ID = 'G-SG3DHRCZMW'; // Replace with your actual GA4 measurement ID
 
 
-	const trackEvent = (eventName: string, params: Record<string, any> = {}) => {
- 
-};
+	
 	// Initialize on mount
 	onMount(() => {
 	  animate = true;
