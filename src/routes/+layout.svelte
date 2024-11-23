@@ -11,7 +11,7 @@ const SEO_CONFIG = {
   shortTitle: 'Indian Spiritual GPT',
   description: 'Access divine guidance through AI-powered Bhagavad Gita wisdom. Get personalized spiritual advice, verse explanations, and life guidance in Hindi, Sanskrit, and English. Experience ancient wisdom with modern AI.',
   longDescription: 'Explore the profound teachings of Bhagavad Gita with our AI-powered spiritual guide. Get personalized guidance, verse explanations, meditation tips, and life advice based on ancient Indian wisdom. Available in multiple Indian languages.',
-  author: 'Gurdeep Singh, Gjam Technologies',
+  author: 'JAPAN GOR, Gjam Technologies',
   siteUrl: 'https://indian.gives',
   imageUrl: 'https://indian.gives/assets/og-image.png',
   twitterImage: 'https://indian.gives/assets/twitter-image.png',
@@ -439,7 +439,7 @@ const SEO_CONFIG = {
 	<!-- Twitter -->
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:site" content="@GjamTech" />
-	<meta name="twitter:creator" content="@GurdeepSinghGjam" />
+	<meta name="twitter:creator" content="@japangor" />
 	<meta name="twitter:title" content={SEO_CONFIG.title} />
 	<meta name="twitter:description" content={SEO_CONFIG.description} />
 	<meta name="twitter:image" content={SEO_CONFIG.twitterImage} />

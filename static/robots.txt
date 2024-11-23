@@ -1,3 +1,17 @@
 User-agent: *
 Allow: /
 Sitemap: https://indian.gives/sitemap.xml
+Allow: /static/
+Allow: /images/
+Allow: /fonts/
+Allow: /*.js$
+Allow: /*.css$
+
+# Allow Google reCAPTCHA resources
+Allow: https://www.gstatic.com/recaptcha/
+Allow: https://www.google.com/recaptcha/
+
+# Block certain paths
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
