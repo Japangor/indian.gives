@@ -498,71 +498,141 @@ const trackEvent = (eventName: string, params: Record<string, any> = {}) => {
   </script>
  
  <svelte:head>
-	<!-- Enhanced SEO Meta Tags -->
-	<title>{SEO_CONFIG.title}</title>
-	<meta name="description" content={SEO_CONFIG.description} />
-	<meta name="keywords" content={Object.values(SEO_CONFIG.keywords).flat().join(', ')} />
-	<meta name="author" content={SEO_CONFIG.author} />
-	
-	<!-- Open Graph -->
-	<meta property="og:type" content="website" />
-	<meta property="og:url" content={SEO_CONFIG.siteUrl} />
-	<meta property="og:title" content={SEO_CONFIG.title} />
-	<meta property="og:description" content={SEO_CONFIG.description} />
-	<meta property="og:image" content={SEO_CONFIG.imageUrl} />
-	<meta property="og:image:alt" content={SEO_CONFIG.imageAlt} />
-	<meta property="og:site_name" content={SEO_CONFIG.shortTitle} />
-	<meta property="og:locale" content="en_IN" />
-	
-	<!-- Twitter -->
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:site" content="@GjamTech" />
-	<meta name="twitter:creator" content="@japangor" />
-	<meta name="twitter:title" content={SEO_CONFIG.title} />
-	<meta name="twitter:description" content={SEO_CONFIG.description} />
-	<meta name="twitter:image" content={SEO_CONFIG.twitterImage} />
-	
-	<!-- Structured Data -->
-	<script type="application/ld+json">
-	  {JSON.stringify(SCHEMA_DATA)}
-	</script>
-	 <script type="application/ld+json">
-		{JSON.stringify({
-		  ...SCHEMA_DATA,
-		  "@context": "https://schema.org",
-		  "@type": "WebApplication",
-		  "sameAs": [
-			"https://linkedin.com/company/gjam",
-			"https://twitter.com/japangor",
-			"https://github.com/japangor",
-			"https://instagram.com/japangor",
-			"https://facebook.com/gjam13"
-		  ],
-		  "mainEntityOfPage": {
-			"@type": "WebPage",
-			"@id": SEO_CONFIG.siteUrl
-		  }
-		})}
-	  </script>
-	<!-- FAQ Schema -->
-	<script type="application/ld+json">
-	  {JSON.stringify(FAQ_SCHEMA)}
-	</script>
-	
-	<!-- Preload Critical Assets -->
-	<link rel="preload" href="/main-logo.png" as="image" />
-	<link rel="preload" href="/fonts/sanskrit-font.woff2" as="font" type="font/woff2" />
-	
-	<!-- Mobile Meta -->
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-	<meta name="theme-color" content="#ffffff" />
-	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-	<script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}></script>
+  <!-- Basic Meta Tags -->
+  <title>{SEO_CONFIG.title}</title>
+  <meta name="description" content={SEO_CONFIG.description} />
+  <meta name="keywords" content={Object.values(SEO_CONFIG.keywords).flat().join(', ')} />
+  <meta name="author" content={SEO_CONFIG.author} />
+  
+  <!-- Open Graph Tags -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={SEO_CONFIG.siteUrl} />
+  <meta property="og:title" content={SEO_CONFIG.title} />
+  <meta property="og:description" content={SEO_CONFIG.description} />
+  <meta property="og:image" content={SEO_CONFIG.imageUrl} />
+  <meta property="og:image:alt" content={SEO_CONFIG.imageAlt} />
+  <meta property="og:site_name" content={SEO_CONFIG.shortTitle} />
+  <meta property="og:locale" content="en_IN" />
+  
+  <!-- Twitter Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@GjamTech" />
+  <meta name="twitter:creator" content="@japangor" />
+  <meta name="twitter:title" content={SEO_CONFIG.title} />
+  <meta name="twitter:description" content={SEO_CONFIG.description} />
+  <meta name="twitter:image" content={SEO_CONFIG.twitterImage} />
 
-	<!-- Canonical -->
-	<link rel="canonical" href={SEO_CONFIG.siteUrl} />
-  </svelte:head>
+  <!-- Fixed Schema Markup -->
+  {@html `
+    <script type="application/ld+json">
+      ${JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "@id": SEO_CONFIG.siteUrl + "#website",
+        "name": SEO_CONFIG.title,
+        "description": SEO_CONFIG.description,
+        "url": SEO_CONFIG.siteUrl,
+        "applicationCategory": "SpiritualityApplication",
+        "operatingSystem": "All",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "ratingCount": "1247",
+          "bestRating": "5"
+        },
+        "inLanguage": ["en", "hi", "sa", "ta", "te", "bn", "mr", "ml"],
+        "features": [
+          "24/7 Personalized spiritual guidance",
+          "Multi-language support (8 Indian languages)",
+          "Verse-by-verse Gita explanation",
+          "Real-time spiritual counseling",
+          "AI-powered meditation guidance",
+          "Karma and dharma insights",
+          "Life purpose discovery",
+          "Mental wellness support",
+          "Professional ethics guidance",
+          "Relationship advice from Gita"
+        ]
+      }, null, 2)}
+    </script>
+  `}
+
+  <!-- Fixed FAQ Schema -->
+  {@html `
+    <script type="application/ld+json">
+      ${JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is Indian Spiritual GPT?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Indian Spiritual GPT is an AI-powered spiritual guide that provides personalized guidance from the Bhagavad Gita in multiple Indian languages. It offers verse explanations, meditation guidance, and life advice based on ancient wisdom."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How can I get spiritual guidance?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can receive instant spiritual guidance by asking questions to our AI chatbot. It provides personalized advice based on Bhagavad Gita teachings, available 24/7 in multiple languages."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What languages are supported?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "We support English, Hindi, Sanskrit, Tamil, Telugu, Bengali, Marathi, and Malayalam, making spiritual wisdom accessible across India."
+            }
+          }
+        ]
+      }, null, 2)}
+    </script>
+  `}
+
+  <!-- Additional SEO Meta Tags -->
+  <meta name="robots" content="index, follow" />
+  <meta name="googlebot" content="index, follow" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="format-detection" content="telephone=no" />
+  
+  <!-- Preconnect and DNS Prefetch -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com"  />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href={SEO_CONFIG.siteUrl} />
+  
+  <!-- Font Preloading -->
+  <link 
+    rel="preload" 
+    href="/fonts/poppins-regular.woff2" 
+    as="font" 
+    type="font/woff2" 
+    crossorigin="anonymous"
+  />
+  <link 
+    rel="preload" 
+    href="/fonts/poppins-medium.woff2" 
+    as="font" 
+    type="font/woff2" 
+    crossorigin="anonymous"
+  />
+  
+  <!-- Critical Assets -->
+  <link rel="preload" href="/main-logo.png" as="image" />
+</svelte:head>
   <div class="min-h-screen flex flex-col">
 	<!-- Header -->
 	<style>
