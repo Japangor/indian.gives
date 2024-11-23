@@ -40,7 +40,8 @@ const config = {
 					foreground: 'hsl(var(--muted-foreground))'
 				},
 				fontFamily: {
-					sanskrit: ['Sanskrit', 'Arial Unicode MS', 'sans-serif'],
+					sanskrit: ['Sanskrit', 'Noto Sans', 'system-ui', '-apple-system', 'sans-serif'],
+					primary: ['Poppins', 'system-ui', '-apple-system', 'sans-serif'],
 				  },
 				accent: {
 					DEFAULT: 'hsl(var(--accent))',

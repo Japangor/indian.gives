@@ -45,6 +45,31 @@
 	.container {
 		@apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
 	  }
+
+	  /* src/styles/fonts.css */
+
+/* Base font classes */
+.font-sanskrit {
+	font-family: 'Sanskrit', 'Noto Sans', system-ui, -apple-system, sans-serif;
+  }
+  
+  .font-primary {
+	font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  }
+  
+  /* Sanskrit text specific styles */
+  .sanskrit-text {
+	font-family: 'Sanskrit', 'Noto Sans', system-ui, -apple-system, sans-serif;
+	line-height: 1.6;
+	letter-spacing: 0.02em;
+  }
+  
+  /* Devanagari text specific styles */
+  .devanagari-text {
+	font-family: 'Sanskrit', 'Noto Sans', system-ui, -apple-system, sans-serif;
+	line-height: 1.8;
+	letter-spacing: 0.01em;
+  }
 	.dark {
 		--background: 222.2 84% 4.9%;
 		--foreground: 210 40% 98%;
