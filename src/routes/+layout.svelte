@@ -526,7 +526,24 @@ const trackEvent = (eventName: string, params: Record<string, any> = {}) => {
 	<script type="application/ld+json">
 	  {JSON.stringify(SCHEMA_DATA)}
 	</script>
-	
+	 <script type="application/ld+json">
+		{JSON.stringify({
+		  ...SCHEMA_DATA,
+		  "@context": "https://schema.org",
+		  "@type": "WebApplication",
+		  "sameAs": [
+			"https://linkedin.com/company/gjam",
+			"https://twitter.com/japangor",
+			"https://github.com/japangor",
+			"https://instagram.com/japangor",
+			"https://facebook.com/gjam13"
+		  ],
+		  "mainEntityOfPage": {
+			"@type": "WebPage",
+			"@id": SEO_CONFIG.siteUrl
+		  }
+		})}
+	  </script>
 	<!-- FAQ Schema -->
 	<script type="application/ld+json">
 	  {JSON.stringify(FAQ_SCHEMA)}
