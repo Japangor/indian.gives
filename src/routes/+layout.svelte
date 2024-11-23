@@ -351,15 +351,7 @@ const FAQ_SCHEMA = {
   ]
 };
 const trackEvent = (eventName: string, params: Record<string, any> = {}) => {
-  if (typeof window !== 'undefined' && 'gtag' in window) {
-    window.gtag('event', eventName, {
-      ...params,
-      send_to: GA_MEASUREMENT_ID,
-      event_category: 'User Interaction',
-      event_label: eventName,
-      value: 1
-    });
-  }
+
 };
    const currentYear = new Date().getFullYear();
   
