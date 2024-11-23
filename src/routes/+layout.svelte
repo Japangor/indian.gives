@@ -541,7 +541,8 @@ const trackEvent = (eventName: string, params: Record<string, any> = {}) => {
 	<meta name="theme-color" content="#ffffff" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-	
+	<script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}></script>
+
 	<!-- Canonical -->
 	<link rel="canonical" href={SEO_CONFIG.siteUrl} />
   </svelte:head>
