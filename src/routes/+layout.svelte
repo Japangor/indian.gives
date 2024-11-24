@@ -296,7 +296,7 @@ const SCHEMA_DATA = {
     },
     "author": {
       "@type": "Organization",
-      "name": "Spiritual Times Weekly"
+      "name": "GJAM TECHNOLOGIES"
     }
   },
   "aggregateRating": {
