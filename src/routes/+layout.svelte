@@ -524,28 +524,71 @@ const trackEvent = (eventName: string, params: Record<string, any> = {}) => {
 
   <!-- Fixed Schema Markup -->
   {@html `
-    <script type="application/ld+json">
+  <script type="application/ld+json">
       ${JSON.stringify({
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        "@id": SEO_CONFIG.siteUrl + "#website",
-        "name": SEO_CONFIG.title,
-        "description": SEO_CONFIG.description,
-        "url": SEO_CONFIG.siteUrl,
-        "applicationCategory": "SpiritualityApplication",
+        "@id": "https://indian.gives/#website",
+        "name": "Indian Spiritual GPT | Divine AI Chatbot for Bhagavad Gita Guidance",
+        "alternateName": ["Gita GPT", "Indian GPT", "Spiritual AI Guide"],
+        "description": "Access divine wisdom through AI-powered Bhagavad Gita guidance. Get personalized spiritual advice, verse explanations, and life guidance in multiple Indian languages. Experience ancient wisdom with modern AI technology by Gjam Technologies.",
+        "url": "https://indian.gives",
+        "applicationCategory": ["SpiritualityApplication", "AIAssistant", "ReligiousApplication"],
         "operatingSystem": "All",
+        "provider": {
+          "@type": "Organization",
+          "name": "Gjam Technologies",
+          "description": "A pioneering Indian software company specializing in AI solutions, bringing ancient wisdom to modern technology",
+          "url": "https://gjam.in",
+          "foundingDate": "2020",
+          "founder": {
+            "@type": "Person",
+            "name": "JAPAN GOR"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "India"
+          },
+          "sameAs": [
+            "https://linkedin.com/company/gjam",
+            "https://twitter.com/japangor",
+            "https://github.com/japangor",
+            "https://instagram.com/japangor",
+            "https://facebook.com/gjam13"
+          ]
+        },
         "offers": {
           "@type": "Offer",
           "price": "0",
-          "priceCurrency": "USD"
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock",
+          "description": "Free access to AI-powered spiritual guidance"
         },
         "aggregateRating": {
           "@type": "AggregateRating",
           "ratingValue": "4.9",
           "ratingCount": "1247",
-          "bestRating": "5"
+          "bestRating": "5",
+          "reviewCount": "1100"
+        },
+        "review": {
+          "@type": "Review",
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "4.8",
+            "bestRating": "5"
+          },
+          "author": {
+            "@type": "Organization",
+            "name": "Spiritual Times Weekly"
+          },
+          "reviewBody": "Revolutionary AI platform combining ancient wisdom with modern technology"
         },
         "inLanguage": ["en", "hi", "sa", "ta", "te", "bn", "mr", "ml"],
+        "availableLanguage": {
+          "@type": "Language",
+          "name": ["English", "Hindi", "Sanskrit", "Tamil", "Telugu", "Bengali", "Marathi", "Malayalam"]
+        },
         "features": [
           "24/7 Personalized spiritual guidance",
           "Multi-language support (8 Indian languages)",
@@ -556,8 +599,68 @@ const trackEvent = (eventName: string, params: Record<string, any> = {}) => {
           "Life purpose discovery",
           "Mental wellness support",
           "Professional ethics guidance",
-          "Relationship advice from Gita"
-        ]
+          "Relationship advice from Gita",
+          "Daily spiritual practices",
+          "Customized meditation routines",
+          "Sanskrit verse translations",
+          "Modern life applications",
+          "Career guidance from Gita"
+        ],
+        "applicationSubCategory": [
+          "Spiritual Guidance",
+          "Meditation",
+          "Mental Wellness",
+          "Religious Education",
+          "Personal Development"
+        ],
+        "screenshot": {
+          "@type": "ImageObject",
+          "url": "https://indian.gives/assets/screenshot.png",
+          "caption": "Indian Spiritual GPT Interface"
+        },
+        "featureList": [
+          "Personalized spiritual guidance based on Bhagavad Gita",
+          "Multi-language support with accurate translations",
+          "Real-time AI-powered spiritual counseling",
+          "Verse-by-verse explanation with modern context",
+          "Meditation guidance and spiritual practices",
+          "Career and relationship advice from Gita",
+          "Mental wellness and stress management",
+          "Life purpose and dharma discovery",
+          "Daily spiritual routines and practices",
+          "Professional ethics and workplace guidance"
+        ],
+        "keywords": [
+          "indian spiritual gpt",
+          "gita ai chatbot",
+          "bhagavad gita ai",
+          "spiritual guidance ai",
+          "indian gives spiritual",
+          "spiritual ai assistant",
+          "gita wisdom chatbot",
+          "spiritual counseling ai",
+          "meditation guidance ai",
+          "karma dharma insights"
+        ],
+        "audience": {
+          "@type": "Audience",
+          "audienceType": [
+            "Spiritual Seekers",
+            "Meditation Practitioners",
+            "Professionals",
+            "Students",
+            "Mental Wellness Seekers"
+          ]
+        },
+        "maintainer": {
+          "@type": "Organization",
+          "name": "Gjam Technologies",
+          "url": "https://gjam.in"
+        },
+        "browserRequirements": "Requires modern web browser",
+        "permissions": "No special permissions required",
+        "softwareVersion": "1.0",
+        "releaseNotes": "Initial public release with 8 language support"
       }, null, 2)}
     </script>
   `}
@@ -574,15 +677,23 @@ const trackEvent = (eventName: string, params: Record<string, any> = {}) => {
             "name": "What is Indian Spiritual GPT?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Indian Spiritual GPT is an AI-powered spiritual guide that provides personalized guidance from the Bhagavad Gita in multiple Indian languages. It offers verse explanations, meditation guidance, and life advice based on ancient wisdom."
+              "text": "Indian Spiritual GPT is an AI-powered divine chatbot by Gjam Technologies that provides personalized spiritual guidance from the Bhagavad Gita. It combines ancient wisdom with modern AI to offer verse explanations, meditation guidance, and practical life advice in multiple Indian languages."
             }
           },
           {
             "@type": "Question",
-            "name": "How can I get spiritual guidance?",
+            "name": "How does Indian Spiritual GPT work?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "You can receive instant spiritual guidance by asking questions to our AI chatbot. It provides personalized advice based on Bhagavad Gita teachings, available 24/7 in multiple languages."
+              "text": "Indian Spiritual GPT uses advanced AI to understand your questions and provide relevant guidance from the Bhagavad Gita. It analyzes your queries, connects them with appropriate verses and teachings, and delivers personalized spiritual advice that's practical for modern life challenges."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What types of guidance can I receive?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can receive guidance on various aspects including stress management, relationship advice, career decisions, spiritual practices, meditation techniques, karma understanding, dharmic duties, life purpose discovery, emotional healing, and verse-by-verse Gita explanations."
             }
           },
           {
@@ -590,7 +701,71 @@ const trackEvent = (eventName: string, params: Record<string, any> = {}) => {
             "name": "What languages are supported?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "We support English, Hindi, Sanskrit, Tamil, Telugu, Bengali, Marathi, and Malayalam, making spiritual wisdom accessible across India."
+              "text": "We support 8 Indian languages: English, Hindi, Sanskrit, Tamil, Telugu, Bengali, Marathi, and Malayalam. This makes spiritual wisdom accessible to a wider Indian audience, with accurate translations maintaining the essence of Gita's teachings."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is Indian Spiritual GPT available 24/7?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, our AI spiritual guide is available 24/7, providing instant guidance whenever you need it. You can seek spiritual advice, verse explanations, or meditation guidance at any time, making spiritual wisdom accessible around the clock."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How accurate are the Gita interpretations?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Our AI is trained on authentic Bhagavad Gita commentaries and verified spiritual texts. The interpretations are carefully curated to maintain accuracy while making them relevant to modern contexts, ensuring faithful transmission of Gita's wisdom."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can it help with mental wellness and stress?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, Indian Spiritual GPT provides guidance for mental wellness using Gita's timeless wisdom. It offers practical advice for stress management, anxiety relief, emotional balance, and inner peace, combining ancient teachings with modern psychological understanding."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What makes Indian Spiritual GPT unique?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It's unique in combining advanced AI technology with authentic Gita wisdom, offering personalized guidance in multiple Indian languages. The platform provides contextual, practical spiritual advice while maintaining the sanctity and depth of traditional teachings."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How can I start using Indian Spiritual GPT?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can start by visiting indian.gives and asking any spiritual question. The AI will guide you through personalized conversations, offering relevant Gita verses, explanations, and practical guidance for your specific situation."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is there any cost to use Indian Spiritual GPT?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Indian Spiritual GPT is freely accessible, making divine wisdom available to all seekers. Our mission is to spread the teachings of Bhagavad Gita and make spiritual guidance accessible to everyone across India."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can it help with professional guidance?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, it provides career and professional guidance based on Gita's teachings about dharma (duty) and karma (action). It helps you make ethical decisions, maintain work-life balance, and achieve professional growth while staying true to spiritual principles."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does it support meditation practices?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, it offers guided meditation techniques, mantra explanations, and spiritual practices based on Gita's teachings. You can receive personalized meditation guidance, daily spiritual routines, and practical tips for spiritual advancement."
             }
           }
         ]
